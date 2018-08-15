@@ -36,7 +36,6 @@ module.exports = class TimezoneParams {
     getLongitude() {
         return this.longitude;
     }
-
 }
 
 
