@@ -43,3 +43,13 @@ geolocationParams.setIps(['1.1.1.1','2.2.22.2','34.1.1.3']);
 
 console.log(api.getGeolocation(geolocationParams));
 ```
+
+### Time Zone API
+```js
+// Query time zone information by time zone ID
+var tzParams = new TimezoneParams();
+
+tzParams.setIp("1.1.1.1");
+console.log(obj.getTimezone());
+```
+
