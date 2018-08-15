@@ -1,4 +1,4 @@
-# ip-geolocation-api-javascript-sdk
+# IPGeolocation API Javascript SDK
 
 ## Installation
 ```cli
