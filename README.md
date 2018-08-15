@@ -16,7 +16,7 @@ var TimezoneParams = require('ip-geolocation-api-javascript-sdk/TimezoneParams.j
 var api = new IPGeolocationAPI("YOUR_API_KEY");
 ```
 
-## Geolocation Lookup
+### Geolocation Lookup
 ```js
 // Query geolocation for IP address (1.1.1.1) and fields (geo, time_zone and currency)
 var geolocationParams = new GeolocationParams();
@@ -35,3 +35,10 @@ console.log(api.getGeolocation(geolocationParams));
 console.log(api.getGeolocation());
 ```
 
+### Bulk Geolocations Lookup
+```js
+var geolocationParams = new GeolocationParams();
+geolocationParams.setIps(['1.1.1.1','2.2.22.2','34.1.1.3']);
+
+console.log(api.getGeolocation(geolocationParams));
+```
