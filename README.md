@@ -13,7 +13,7 @@ var IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk');
 var GeolocationParams = require('ip-geolocation-api-javascript-sdk/GeolocationParams.js');
 var TimezoneParams = require('ip-geolocation-api-javascript-sdk/TimezoneParams.js');
 
-## Setup API
+### Setup API
 var api = new IPGeolocationAPI("YOUR_API_KEY");
 
 ## Geolocation Lookup
