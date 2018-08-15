@@ -5,7 +5,7 @@ module.exports = class TimezoneParams {
         var timezone = "";
         var ip = "";
         var latitude = 1000.0;
-        var latitude = 1000.0;
+        var longitude = 1000.0;
     }
 
     setTimezone(timezone = "") {
@@ -36,8 +36,6 @@ module.exports = class TimezoneParams {
     getLongitude() {
         return this.longitude;
     }
-
-
 }
 
 

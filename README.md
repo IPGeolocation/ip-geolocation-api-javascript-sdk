@@ -4,6 +4,7 @@
 ```cli
     npm i ip-geolocation-api-javascript-sdk
 ```
+
 ## Usage
 ```js
 var IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk');
