@@ -36,6 +36,7 @@ console.log(api.getGeolocation());
 ```
 
 ### Bulk Geolocations Lookup
+// Query geolocations for multiple IP addresses and all fields
 ```js
 var geolocationParams = new GeolocationParams();
 geolocationParams.setIps(['1.1.1.1','2.2.22.2','34.1.1.3']);
