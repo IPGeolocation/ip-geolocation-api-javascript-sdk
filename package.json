@@ -1,15 +1,12 @@
 {
-  "name": "ipgeolocation-ip-test",
+  "name": "ip-geolocation-api-javascript-sdk",
   "version": "1.0.0",
-  "description": "new pkg",
-  "main": "index.js",
+  "description": "",
+  "main": "IPGeolocationAPI.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "ipgeolocation"
-  ],
-  "author": "NPM ipgeolocation <support@ipgeolocation.io> (http://ipgeolocation.io)",
+  "author": "ipgeolocation",
   "license": "ISC",
   "dependencies": {
     "xmlhttprequest": "^1.8.0"
