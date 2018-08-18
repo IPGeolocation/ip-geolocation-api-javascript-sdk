@@ -82,20 +82,25 @@ function getRequest(subUrl = "", params = ""){
 var jsonData = null;
 var data = null;
 
-
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 xhr.addEventListener("readystatechange", function () {
+
 if (this.readyState === 4) {
 
-            jsonData = JSON.parse(this.responseText);
+            if(this.status == 0){
+		  jsonData = {
+		  "message": "Internet is not connected!"
+		  };
+             }else{
+		    jsonData = JSON.parse(this.responseText);
+             }
+
 }
 });
-console.log("https://api.ipgeolocation.io/"+subUrl+"?"+params+"");
 xhr.open("GET", "https://api.ipgeolocation.io/"+subUrl+"?"+params+"", false);
 xhr.send(data);
-
 return jsonData;
 
 }
@@ -114,7 +119,13 @@ var xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 xhr.addEventListener("readystatechange", function () {
 if (this.readyState === 4) {
-            jsonData = JSON.parse(this.responseText);
+             if(this.status == 0){
+		  jsonData = {
+		  "message": "Internet is not connected!"
+		  };
+             }else{
+                  jsonData = JSON.parse(this.responseText);
+             }
 }
 });
 xhr.open("POST", "https://api.ipgeolocation.io/"+subUrl+"?apiKey="+apiKey+"", false);

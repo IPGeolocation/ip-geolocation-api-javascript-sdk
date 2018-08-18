@@ -1,14 +1,26 @@
 {
   "name": "ip-geolocation-api-javascript-sdk",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "IPGeolocationAPI.js",
+  "dependencies": {
+    "xmlhttprequest": "^1.8.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "ip",
+    "ipgeo",
+    "ip geolocation",
+    "ip geolocation api",
+    "time zone",
+    "ip geolocation sdk",
+    "geolocation javascript",
+    "geoip lookup",
+    "geoip api",
+    "ip location api"
+  ],
   "author": "ipgeolocation",
-  "license": "ISC",
-  "dependencies": {
-    "xmlhttprequest": "^1.8.0"
-  }
+  "license": "ISC"
 }
