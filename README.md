@@ -26,7 +26,7 @@ Internet connection is required to run this component.
 $ npm install ip-geolocation-api-javascript-sdk
 ```
 
-## IP Geolocation API C# SDK Basic Usage
+## Basic Usage
 ### Setup API
 ```javascript
 var IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk');
