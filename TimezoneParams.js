@@ -1,6 +1,5 @@
 module.exports = class TimezoneParams {
 
-
     constructor() {
         var timezone = "";
         var ip = "";
