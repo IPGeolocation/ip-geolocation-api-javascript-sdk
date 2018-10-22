@@ -123,14 +123,14 @@ function geoResponse(json) {
 var timezoneParams = new TimezoneParams();
 timezoneParams.setIp("1.1.1.1");
 
-ipgeolocationApi.getTimezone(timezoneParams, geoResponse);
-function geoResponse(json) {
+ipgeolocationApi.getTimezone(timezoneParams, timeZoneResponse);
+function timeZoneResponse(json) {
     console.log(json);
 }
 
 // Query time zone information for calling machine’s IP address
-ipgeolocationApi.getTimezone(null, geoResponse);
-function geoResponse(json) {
+ipgeolocationApi.getTimezone(null, timeZoneResponse);
+function timeZoneResponse(json) {
     console.log(json);
 }
 ```
