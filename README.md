@@ -78,7 +78,7 @@ function geoResponse(json) {
 ```ts
 // Query geolocations for multiple IP addresses and all fields
 var geolocationParams = new GeolocationParams();
-geolocationParams.setIps(['1.1.1.1', '2.2.2.2', '3.3.3.3']);
+geolocationParams.setIPList(['1.1.1.1', '2.2.2.2', '3.3.3.3']);
 
 ipgeolocationApi.getGeolocation(geolocationParams, geoResponse);
 function geoResponse(json) {
@@ -87,7 +87,7 @@ function geoResponse(json) {
 
 // Query geolocations for multiple IP addresses but only 'geo' field
 var geolocationParams = new GeolocationParams();
-geolocationParams.setIps(['1.1.1.1', '2.2.2.2', '3.3.3.3']);
+geolocationParams.setIPList(['1.1.1.1', '2.2.2.2', '3.3.3.3']);
 geolocationParams.setFields("geo");
 
 ipgeolocationApi.getGeolocation(geolocationParams, geoResponse);
