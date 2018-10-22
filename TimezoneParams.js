@@ -15,11 +15,11 @@ module.exports = class TimezoneParams {
         return this.timezone;
     }
 
-    setIp(ip = "") {
+    setIP(ip = "") {
         this.ip = ip;
     }
 
-    getIp() {
+    getIP() {
         return this.ip;
     }
 

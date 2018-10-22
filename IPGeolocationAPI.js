@@ -3,7 +3,7 @@ var TimezoneParams = require('./TimezoneParams.js');
 
 module.exports = class IPGeolocationAPI {
 
-	constructor(apiKey = "") {
+    constructor(apiKey = "") {
         this.apiKey = apiKey;
     }
 
@@ -11,104 +11,125 @@ module.exports = class IPGeolocationAPI {
         return this.apiKey;
     }
 
-    getGeolocation(params = null) {
-        if(params.getIps()) {
-			return postRequest("ipgeo-bulk", params, this.apiKey);
+    getGeolocation(params = null, callback) {
+        if(params && params.getIPList()) {
+            return postRequest("ipgeo-bulk", params, this.apiKey, callback);
         } else {
-			return getRequest("ipgeo", buildGeolocationUrlParams(params, this.apiKey));
-		}
+            return getRequest("ipgeo", buildGeolocationUrlParams(params, this.apiKey), callback);
+        }
     }
      
-    getTimezone(params = null) {
-		return getRequest("timezone", buildTimezoneUrlParams(params, this.apiKey));
+    getTimezone(params = null, callback) {
+        return getRequest("timezone", buildTimezoneUrlParams(params, this.apiKey), callback);
     }
 }
 
-function buildTimezoneUrlParams(params=null, apiKey="") {
-	var urlParams = "apiKey=" + apiKey;
+function buildTimezoneUrlParams(params = null, apiKey = "") {
+    var urlParams = "";
 
-	if(params != null) {
-		var param = params.getIp();
-		if(param && param != "") {
-			urlParams = urlParams + "&ip=" + param;
-		}
+    if(apiKey) {
+        urlParams = urlParams.concat("apiKey=", apiKey);
+    }
 
-		param = params.getTimezone();
-		if(param && param != "") {
-			urlParams = urlParams + "&tz=" + param;
-		}
+    if(params) {
+        var ip = params.getIP();
 
-		var latitude = params.getLatitude();
-		var longitude = params.getLongitude();
-		if(latitude && latitude != 1000.0 && longitude && longitude != 1000.0) {
-			urlParams = urlParams + "&lat=" + latitude + "&long=" + longitude;
-		}
-	}
-	return urlParams;
+        if(ip) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("ip=", ip);
+        }
+
+        var tz = params.getTimezone();
+
+        if(tz) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("tz=", tz);
+        }
+
+        var latitude = params.getLatitude();
+        var longitude = params.getLongitude();
+
+        if(latitude && latitude !== 1000.0 && longitude && longitude !== 1000.0) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("lat=", latitude, "&long=", longitude);
+        }
+    }
+    return urlParams;
 }
 
-function buildGeolocationUrlParams(params=null, apiKey="") {
-	var urlParams = "apiKey=" + apiKey;
-	
-	if(params != null) {
-		var param = params.getIp();
-           
-		if(param && param != "") {
-			urlParams = urlParams + "&ip=" + param;
-		}
-		param = params.getFields();
-		if(param && param != "") {
-			urlParams = urlParams + "&fields=" + param;
-		}
-	}
-	return urlParams;
+function buildGeolocationUrlParams(params = null, apiKey = "") {
+    var urlParams = "";
+
+    if(apiKey) {
+        urlParams = urlParams.concat("apiKey=", apiKey);
+    }
+
+    if(params) {
+        var ip = params.getIP();
+        
+        if(ip) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("ip=", ip);
+        }
+
+        var fields = params.getFields();
+    
+        if(fields) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("fields=", fields);
+        }
+    }
+    return urlParams;
 }
 
-function getRequest(subUrl="", params="") {
-	var jsonData = null;
-	var data = null;
-	var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener("readystatechange", function () {
-		if(this.readyState === 4) {
-			if(this.status === 0) {
-				jsonData = {
-					"message": "Internet is not connected!"
-				};
-			} else {
-				jsonData = JSON.parse(this.responseText);
-			}
-		}
-	});
-	xhr.open("GET", "https://api.ipgeolocation.io/"+subUrl+"?"+params+"", false);
-	xhr.send(data);
-	return jsonData;
+function getRequest(subUrl = "", params = "", callback) {
+    var jsonData = null;
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.withCredentials = true;
+    xhttp.onreadystatechange = function() {
+        if (this.readyState === 4) {
+            jsonData = JSON.parse(this.responseText);
+
+            if (callback && typeof(callback) === typeof(Function)) {
+                callback(jsonData);
+            }
+        }
+    };
+    xhttp.open("GET", "https://api.ipgeolocation.io/".concat(subUrl, "?", params, ""), true);
+    xhttp.send();
 }
 
-function postRequest(subUrl="", params="", apiKey="") {
-	var jsonData = null; 
-	var data = JSON.stringify({
-	  "ips": params.getIps()
-	});
-	var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-	var xhr = new XMLHttpRequest();
-	xhr.withCredentials = true;
-	
-	xhr.addEventListener("readystatechange", function () {
-		if(this.readyState === 4) {
-			if(this.status === 0) {
-				jsonData = {
-					"message": "Internet is not connected!"
-				};
-			} else {
-				jsonData = JSON.parse(this.responseText);
-			}
-		}
-	});
-	xhr.open("POST", "https://api.ipgeolocation.io/"+subUrl+"?apiKey="+apiKey+"", false);
-	xhr.setRequestHeader("Content-Type", "application/json");
-	xhr.send(data);
-	return jsonData;
+function postRequest(subUrl = "", params = "", apiKey = "", callback) {
+    var jsonData = null; 
+    var data = JSON.stringify({
+        "ips": params.getIPList()
+    });
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.withCredentials = true;
+    xhttp.onreadystatechange = function() {
+        if (this.readyState === 4) {
+            jsonData = JSON.parse(this.responseText);
+            
+            if (callback && typeof(callback) === typeof(Function)) {
+                callback(jsonData);
+            }
+        }
+    };
+    xhttp.open("POST", "https://api.ipgeolocation.io/".concat(subUrl, "?apiKey=", apiKey, ""), true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(data);
 }

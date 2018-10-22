@@ -1,16 +1,16 @@
 module.exports = class GeolocationParams  {
 
     constructor() {
-	var ip = "";
-	var fields = "";
-	var ips = "";
+        var ip = "";
+        var fields = "";
+        var ips = "";
     }
 
-    setIp(ip = "") {
-      this.ip = ip;
+    setIP(ip = "") {
+        this.ip = ip;
     }
 
-    getIp() {
+    getIP() {
         return this.ip;
     }
 
@@ -22,7 +22,7 @@ module.exports = class GeolocationParams  {
         return this.fields;
     }
 
-    setIps(ips = "") {
+    setIPList(ips = []) {
         if(ips.length > 50) {
             console.log("Max. number of IP addresses cannot be more than 50.");
         } else {
@@ -30,7 +30,7 @@ module.exports = class GeolocationParams  {
         }
     }
 
-    getIps() {
+    getIPList() {
         return this.ips;
     }
 }

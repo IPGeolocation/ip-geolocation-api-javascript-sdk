@@ -1,14 +1,37 @@
 {
-  "name": "ip-geolocation-api-javascript-sdk",
-  "version": "1.0.3",
-  "description": "",
-  "main": "IPGeolocationAPI.js",
+  "_from": "ip-geolocation-api-javascript-sdk",
+  "_id": "ip-geolocation-api-javascript-sdk@1.0.5",
+  "_inBundle": false,
+  "_integrity": "sha512-hzaB5USO7B3XltJTckXK9FtC+OpSiGx4h8/nV3eskFhmmTBC1YVTd9WnlJTUQm3sb9e+V3pzu8coNbXC3ZrRPg==",
+  "_location": "/ip-geolocation-api-javascript-sdk",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "ip-geolocation-api-javascript-sdk",
+    "name": "ip-geolocation-api-javascript-sdk",
+    "escapedName": "ip-geolocation-api-javascript-sdk",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ip-geolocation-api-javascript-sdk/-/ip-geolocation-api-javascript-sdk-1.0.5.tgz",
+  "_shasum": "0273f7c043749ce91a586388edf35319d2c52818",
+  "_spec": "ip-geolocation-api-javascript-sdk",
+  "_where": "/home/developer/jvs/new-npm",
+  "author": {
+    "name": "ipgeolocation"
+  },
+  "bundleDependencies": false,
   "dependencies": {
     "xmlhttprequest": "^1.8.0"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "deprecated": false,
+  "description": "## Installation ```cli     npm i ip-geolocation-api-javascript-sdk ```",
   "keywords": [
     "ip",
     "ipgeo",
@@ -21,6 +44,11 @@
     "geoip api",
     "ip location api"
   ],
-  "author": "ipgeolocation",
-  "license": "ISC"
+  "license": "ISC",
+  "main": "IPGeolocationAPI.js",
+  "name": "ip-geolocation-api-javascript-sdk",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.5"
 }
