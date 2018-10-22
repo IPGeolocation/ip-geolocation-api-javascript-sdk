@@ -40,6 +40,9 @@ var IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk');
 
 // Create IPGeolocationAPI object, passing your valid API key
 var ipgeolocationApi = new IPGeolocationAPI("YOUR_API_KEY");
+
+**Note:** If you want to authorize your requests by your _Request Origin_, you can create IPGeolocationAPI object without an API key.
+var ipgeolocationApi = new IPGeolocationAPI();
 ```
 
 ### Geolocation Lookup
