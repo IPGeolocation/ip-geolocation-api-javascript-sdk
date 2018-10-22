@@ -48,20 +48,29 @@ var ipgeolocationApi = new IPGeolocationAPI("YOUR_API_KEY");
 var GeolocationParams = require('ip-geolocation-api-javascript-sdk/GeolocationParams.js');
 
 // Query geolocation for the calling machine's IP address for all fields
-console.log(ipgeolocationApi.getGeolocation());
+ipgeolocationApi.getGeolocation(null, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 
 // Query geolocation for IP address (1.1.1.1) and all fields
 var geolocationParams = new GeolocationParams();
 geolocationParams.setIp("1.1.1.1");
 
-console.log(ipgeolocationApi.getGeolocation(geolocationParams));
+ipgeolocationApi.getGeolocation(geolocationParams, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 
 // Query geolocation for IP address (1.1.1.1) and fields (geo, time_zone and currency)
 var geolocationParams = new GeolocationParams();
 geolocationParams.setIp("1.1.1.1"); 
 geolocationParams.setFields("geo,time_zone,currency");
 
-console.log(ipgeolocationApi.getGeolocation(geolocationParams));
+ipgeolocationApi.getGeolocation(geolocationParams, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 ```
 
 ### Bulk Geolocations Lookup
@@ -71,14 +80,20 @@ console.log(ipgeolocationApi.getGeolocation(geolocationParams));
 var geolocationParams = new GeolocationParams();
 geolocationParams.setIps(['1.1.1.1', '2.2.2.2', '3.3.3.3']);
 
-console.log(ipgeolocationApi.getGeolocation(geolocationParams));
+ipgeolocationApi.getGeolocation(geolocationParams, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 
 // Query geolocations for multiple IP addresses but only 'geo' field
 var geolocationParams = new GeolocationParams();
 geolocationParams.setIps(['1.1.1.1', '2.2.2.2', '3.3.3.3']);
 geolocationParams.setFields("geo");
 
-console.log(ipgeolocationApi.getGeolocation(geolocationParams));
+ipgeolocationApi.getGeolocation(geolocationParams, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 ```
 
 ### Time Zone API
@@ -90,20 +105,32 @@ var TimezoneParams = require('ip-geolocation-api-javascript-sdk/TimezoneParams.j
 var timezoneParams = new TimezoneParams();
 timezoneParams.setTimezone("America/New_York");
 
-console.log(ipgeolocationApi.getTimezone(timezoneParams));
+ipgeolocationApi.getTimezone(timezoneParams, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 
 // Query time zone information by latitude and longitude of the location
 var timezoneParams = new TimezoneParams();
 timezoneParams.setLocation(37.1838139, -123.8105225);
 
-console.log(ipgeolocationApi.getTimezone(timezoneParams));
+ipgeolocationApi.getTimezone(timezoneParams, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 
 // Query time zone information for IP address (1.1.1.1)
 var timezoneParams = new TimezoneParams();
 timezoneParams.setIp("1.1.1.1");
 
-console.log(ipgeolocationApi.getTimezone(timezoneParams));
+ipgeolocationApi.getTimezone(timezoneParams, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 
 // Query time zone information for calling machine’s IP address
-console.log(ipgeolocationApi.getTimezone());
+ipgeolocationApi.getTimezone(null, geoResponse);
+function geoResponse(json) {
+    console.log(json);
+}
 ```
