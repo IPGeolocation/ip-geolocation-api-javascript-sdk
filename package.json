@@ -1,6 +1,6 @@
 {
   "_from": "ip-geolocation-api-javascript-sdk",
-  "_id": "ip-geolocation-api-javascript-sdk@1.0.5",
+  "_id": "ip-geolocation-api-javascript-sdk@1.0.6",
   "_inBundle": false,
   "_integrity": "sha512-hzaB5USO7B3XltJTckXK9FtC+OpSiGx4h8/nV3eskFhmmTBC1YVTd9WnlJTUQm3sb9e+V3pzu8coNbXC3ZrRPg==",
   "_location": "/ip-geolocation-api-javascript-sdk",
@@ -19,7 +19,7 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/ip-geolocation-api-javascript-sdk/-/ip-geolocation-api-javascript-sdk-1.0.5.tgz",
+  "_resolved": "https://registry.npmjs.org/ip-geolocation-api-javascript-sdk/-/ip-geolocation-api-javascript-sdk-1.0.6.tgz",
   "_shasum": "0273f7c043749ce91a586388edf35319d2c52818",
   "_spec": "ip-geolocation-api-javascript-sdk",
   "_where": "/home/developer/jvs/new-npm",
@@ -31,7 +31,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "deprecated": false,
-  "description": "## Installation ```cli     npm i ip-geolocation-api-javascript-sdk ```",
+  "description": "Javascript SDK for [IP Geolocation API](https://ipgeolocation.io/). You can use this SDK to Geolocate an IP address and get time zone information based on geolocation coordinates, or an IP address.",
   "keywords": [
     "ip",
     "ipgeo",
@@ -50,5 +50,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.5"
+  "version": "1.0.6"
 }
