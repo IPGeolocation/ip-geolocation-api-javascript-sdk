@@ -1,29 +1,38 @@
 module.exports = class TimezoneParams {
 
     constructor() {
-        var timezone = "";
-        var ip = "";
+        var tz = "";
+        var ipAddress = "";
+        var lang = "";
         var latitude = 1000.0;
         var longitude = 1000.0;
     }
 
-    setTimezone(timezone = "") {
-        this.timezone = timezone;
+    setTimezone(tz = "") {
+        this.tz = tz;
     }
 
     getTimezone() {
-        return this.timezone;
+        return this.tz;
     }
 
-    setIP(ip = "") {
-        this.ip = ip;
+    setIPAddress(ipAddress = "") {
+        this.ipAdress = ipAddress;
     }
 
-    getIP() {
-        return this.ip;
+    getIPAddress() {
+        return this.ipAdress;
     }
 
-    setLocation(latitude = "", longitude = "") {
+    setLang(lang = "") {
+        this.lang = lang;
+    }
+
+    getLang() {
+        return this.lang;
+    }
+
+    setCoordinates(latitude = "", longitude = "") {
         this.latitude = latitude;
         this.longitude = longitude;
     }
