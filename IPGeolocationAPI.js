@@ -3,96 +3,115 @@ var TimezoneParams = require('./TimezoneParams.js');
 
 module.exports = class IPGeolocationAPI {
 
-    constructor(apiKey = "") {
+    constructor(apiKey = "", async = true) {
         this.apiKey = apiKey;
+        this.async = async;
+    }
+
+    getGeolocation(callback, geolocationParams = null) {
+        if(geolocationParams && geolocationParams.getIPAddresses()) {
+            var jsonData = JSON.stringify({
+                "ips": params.getIPAddresses()
+            });
+
+            return postRequest("ipgeo-bulk", buildGeolocationUrlParams(this.apiKey, geolocationParams), jsonData, callback);
+        } else {
+            return getRequest("ipgeo", buildGeolocationUrlParams(this.apiKey, geolocationParams), callback);
+        }
+    }
+     
+    getTimezone(callback, timezoneParams = null) {
+        return getRequest("timezone", buildTimezoneUrlParams(this.apiKey, timezoneParams), callback);
     }
 
     getApiKey() {
         return this.apiKey;
     }
 
-    getGeolocation(params = null, callback) {
-        if(params && params.getIPList()) {
-            return postRequest("ipgeo-bulk", params, this.apiKey, callback);
-        } else {
-            return getRequest("ipgeo", buildGeolocationUrlParams(params, this.apiKey), callback);
-        }
-    }
-     
-    getTimezone(params = null, callback) {
-        return getRequest("timezone", buildTimezoneUrlParams(params, this.apiKey), callback);
+    isAsync() {
+        return this.async;
     }
 }
 
-function buildTimezoneUrlParams(params = null, apiKey = "") {
+function buildGeolocationUrlParams(apiKey = "", geolocationParams = null) {
     var urlParams = "";
 
     if(apiKey) {
         urlParams = urlParams.concat("apiKey=", apiKey);
     }
 
-    if(params) {
-        var ip = params.getIP();
-
-        if(ip) {
+    if(geolocationParams) {
+        if(geolocationParams.getIPAddress()) {
             if(urlParams) {
                 urlParams = urlParams.concat("&");
             }
-            urlParams = urlParams.concat("ip=", ip);
+            urlParams = urlParams.concat("ip=", geolocationParams.getIPAddress());
         }
-
-        var tz = params.getTimezone();
-
-        if(tz) {
-            if(urlParams) {
-                urlParams = urlParams.concat("&");
-            }
-            urlParams = urlParams.concat("tz=", tz);
-        }
-
-        var latitude = params.getLatitude();
-        var longitude = params.getLongitude();
-
-        if(latitude && latitude !== 1000.0 && longitude && longitude !== 1000.0) {
-            if(urlParams) {
-                urlParams = urlParams.concat("&");
-            }
-            urlParams = urlParams.concat("lat=", latitude, "&long=", longitude);
-        }
-    }
-    return urlParams;
-}
-
-function buildGeolocationUrlParams(params = null, apiKey = "") {
-    var urlParams = "";
-
-    if(apiKey) {
-        urlParams = urlParams.concat("apiKey=", apiKey);
-    }
-
-    if(params) {
-        var ip = params.getIP();
-        
-        if(ip) {
-            if(urlParams) {
-                urlParams = urlParams.concat("&");
-            }
-            urlParams = urlParams.concat("ip=", ip);
-        }
-
-        var fields = params.getFields();
     
-        if(fields) {
+        if(geolocationParams.getFields()) {
             if(urlParams) {
                 urlParams = urlParams.concat("&");
             }
-            urlParams = urlParams.concat("fields=", fields);
+            urlParams = urlParams.concat("fields=", geolocationParams.getFields());
+        }
+    
+        if(geolocationParams.getExcludes()) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("excludes=", geolocationParams.getExcludes());
+        }
+    
+        if(geolocationParams.getLang()) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("lang=", geolocationParams.getLang());
         }
     }
     return urlParams;
 }
 
-function getRequest(subUrl = "", params = "", callback) {
+function buildTimezoneUrlParams(apiKey = "", timezoneParams = null) {
+    var urlParams = "";
+
+    if(apiKey) {
+        urlParams = urlParams.concat("apiKey=", apiKey);
+    }
+
+    if(timezoneParams) {
+        if(timezoneParams.getIPAddress()) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("ip=", timezoneParams.getIPAddress());
+        }
+
+        if(timezoneParams.getTimezone()) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("tz=", timezoneParams.getTimezone());
+        }
+
+        if(timezoneParams.getLatitude() !== 1000.0 && timezoneParams.getLongitude() !== 1000.0) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("lat=", timezoneParams.getLatitude(), "&long=", timezoneParams.getLongitude());
+        }
+    
+        if(timezoneParams.getLang()) {
+            if(urlParams) {
+                urlParams = urlParams.concat("&");
+            }
+            urlParams = urlParams.concat("lang=", timezoneParams.getLang());
+        }
+    }
+    return urlParams;
+}
+
+function getRequest(subUrl = "", urlParams = "", callback) {
     var jsonData = null;
     var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     var xhttp = new XMLHttpRequest();
@@ -107,15 +126,12 @@ function getRequest(subUrl = "", params = "", callback) {
             }
         }
     };
-    xhttp.open("GET", "https://api.ipgeolocation.io/".concat(subUrl, "?", params, ""), true);
+    xhttp.open("GET", "https://api.ipgeolocation.io/".concat(subUrl, "?", urlParams, ""), this.async);
     xhttp.send();
 }
 
-function postRequest(subUrl = "", params = "", apiKey = "", callback) {
+function postRequest(subUrl = "", urlParams = "", requestData = "", callback) {
     var jsonData = null; 
-    var data = JSON.stringify({
-        "ips": params.getIPList()
-    });
     var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     var xhttp = new XMLHttpRequest();
 
@@ -129,7 +145,8 @@ function postRequest(subUrl = "", params = "", apiKey = "", callback) {
             }
         }
     };
-    xhttp.open("POST", "https://api.ipgeolocation.io/".concat(subUrl, "?apiKey=", apiKey, ""), true);
+    xhttp.open("POST", "https://api.ipgeolocation.io/".concat(subUrl, "?", urlParams, ""), this.async);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(data);
+    xhttp.setRequestHeader("Accept", "application/json");
+    xhttp.send(requestData);
 }

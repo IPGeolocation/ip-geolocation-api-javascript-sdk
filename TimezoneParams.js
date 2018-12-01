@@ -24,7 +24,7 @@ module.exports = class TimezoneParams {
         return this.ipAdress;
     }
 
-    setLang(lang = "") {
+    setLang(lang = "en") {
         this.lang = lang;
     }
 
@@ -32,7 +32,7 @@ module.exports = class TimezoneParams {
         return this.lang;
     }
 
-    setCoordinates(latitude = "", longitude = "") {
+    setCoordinates(latitude = 1000.0, longitude = 1000.0) {
         this.latitude = latitude;
         this.longitude = longitude;
     }

@@ -32,7 +32,7 @@ module.exports = class GeolocationParams  {
         return this.excludes;
     }
 
-    setLang(lang = "") {
+    setLang(lang = "en") {
         this.lang = lang;
     }
 
