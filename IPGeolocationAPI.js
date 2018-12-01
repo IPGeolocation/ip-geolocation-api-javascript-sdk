@@ -8,6 +8,11 @@ module.exports = class IPGeolocationAPI {
         this.async = async;
     }
 
+    constructor(async = true) {
+        this.apiKey = "";
+        this.async = async;
+    }
+
     getGeolocation(callback, geolocationParams = null) {
         if(geolocationParams && geolocationParams.getIPAddresses()) {
             var jsonData = JSON.stringify({
