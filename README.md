@@ -36,19 +36,12 @@ $ npm install ip-geolocation-api-javascript-sdk
 ### Setup API
 
 ```javascript
-var IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk/IPGeolocationAPI');
+var IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk');
 
-// Create IPGeolocationAPI object, passing your valid API key (optional) and async requests mode (optional, default: true)
-var ipgeolocationApi = new IPGeolocationAPI("YOUR_API_KEY");
-
-// Turn off async mode
-var ipgeolocationApi = new IPGeolocationAPI("YOUR_API_KEY", false);
-
-// If you want to authorize your requests by your "Request Origin", you can create IPGeolocationAPI object without an API key
-var ipgeolocationApi = new IPGeolocationAPI();
-
-// Turn off async mode
-var ipgeolocationApi = new IPGeolocationAPI(false);
+// Create IPGeolocationAPI object. Constructor takes two parameters.
+// 1) API key (Optional: To authenticate your requests through "Request Origin", you can skip it.)
+// 2) Async (Optional: It is used to toggle "async" mode in the requests. By default, it is true.)
+var ipgeolocationApi = new IPGeolocationAPI("YOUR_API_KEY", false); 
 ```
 
 ### Geolocation Lookup
@@ -61,19 +54,27 @@ function handleResponse(json) {
 
 var GeolocationParams = require('ip-geolocation-api-javascript-sdk/GeolocationParams.js');
 
-// Query geolocation for an IP address "1.1.1.1" and all fields
+// Get complete geolocation for the calling machine's IP address
+ipgeolocationApi.getGeolocation(handleResponse);
+
+// Get complete geolocation in Russian** for IP address (1.1.1.1)
 var geolocationParams = new GeolocationParams();
-geolocationParams.setIPAddress("1.1.1.1");
+geolocationParams.setIPAddress('1.1.1.1');
+geolocationParams.setLang('ru');
 
 ipgeolocationApi.getGeolocation(handleResponse, geolocationParams);
 
-// Query geolocation for the calling machine's IP address for all fields
-ipgeolocationApi.getGeolocation(handleResponse);
-
-// Query geolocation for an IP address "1.1.1.1" and fields "geo, time_zone, currency"
+// Get custom geolocation (only "geo, time_zone and currency" fields/objects) for an IP address (1.1.1.1)
 var geolocationParams = new GeolocationParams();
-geolocationParams.setIPAddress("1.1.1.1"); 
-geolocationParams.setFields("geo,time_zone,currency");
+geolocationParams.setIPAddress('1.1.1.1'); 
+geolocationParams.setFields('geo,time_zone,currency');
+
+ipgeolocationApi.getGeolocation(handleResponse, geolocationParams);
+
+// Exclude fields/obejects from complete geolocation in Italian language
+var geolocationParams = new GeolocationParams();
+geolocationParams.setExcludes('continent_name,country_code3,time_zone');
+geolocationParams.setLang('it');
 
 ipgeolocationApi.getGeolocation(handleResponse, geolocationParams);
 ```
@@ -81,43 +82,58 @@ ipgeolocationApi.getGeolocation(handleResponse, geolocationParams);
 ### Bulk Geolocations Lookup
 
 ```ts
-// Query geolocations for multiple IP addresses and all fields
+// Query geolocation in German** for multiple IP addresses and all fields
 var geolocationParams = new GeolocationParams();
-geolocationParams.setIPAddresses(["1.1.1.1", "2.2.2.2", "3.3.3.3"]);
+geolocationParams.setLang('de');
+geolocationParams.setIPAddresses(['1.1.1.1', '2.2.2.2', '3.3.3.3']);
 
 ipgeolocationApi.getGeolocation(handleResponse, geolocationParams);
 
-// Query geolocations for multiple IP addresses but only 'geo' field
+// Specify the required fields/objects for multiple IP addresses
 var geolocationParams = new GeolocationParams();
-geolocationParams.setIPAddresses(["1.1.1.1", "2.2.2.2", "3.3.3.3"]);
-geolocationParams.setFields("geo");
+geolocationParams.setIPAddresses(['1.1.1.1', '2.2.2.2', '3.3.3.3']);
+geolocationParams.setFields('geo');
 
-ipgeolocationApi.getGeolocation(handleResponse, geolocationParams);
+ipgeolocationApi.getGeolocation(geolocationParams, geoResponse);
 ```
 
-### Time Zone API
+### Timezone API
 
 ```ts
 var TimezoneParams = require('ip-geolocation-api-javascript-sdk/TimezoneParams.js');
 
-// Query time zone information by time zone ID
+// Get time zone information by time zone ID
 var timezoneParams = new TimezoneParams();
-timezoneParams.setTimezone("America/New_York");
+timezoneParams.setTimezone('America/Los_Angeles');
 
 ipgeolocationApi.getTimezone(handleResponse, timezoneParams);
 
-// Query time zone information by latitude and longitude of the location
+// Get time zone information by latitude and longitude of the location
 var timezoneParams = new TimezoneParams();
-timezoneParams.setCoordinates(37.1838139, -123.8105225);
+timezoneParams.setCoordinates('37.1838139', '-123.8105225');
 
 ipgeolocationApi.getTimezone(handleResponse, timezoneParams);
 
-// Query time zone information for IP address "1.1.1.1"
+// Get time zone information for IP address (1.1.1.1) and geolocation information Japanese**
 var timezoneParams = new TimezoneParams();
-timezoneParams.setIPAddress("1.1.1.1");
+timezoneParams.setIPAddress('1.1.1.1');
 
 ipgeolocationApi.getTimezone(handleResponse, timezoneParams);
 
-// Query time zone information for calling machine’s IP address
+// Query time zone information for calling machine's IP address
 ipgeolocationApi.getTimezone(handleResponse);
 ```
+
+** IPGeolocation provides geolocation information in the following languages:
+
+* English (en)
+* German (de)
+* Russian (ru)
+* Japanese (ja)
+* French (fr)
+* Chinese Simplified (cn)
+* Spanish (es)
+* Czech (cs)
+* Italian (it)
+
+By default, geolocation information is returned in English. Response in a language other than English is available to paid users only.
