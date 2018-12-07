@@ -1,14 +1,14 @@
 module.exports = class GeolocationParams  {
 
     constructor() {
-        var ipAdress = "";
-        var fields = "";
-        var excludes = "";
-        var lang = "";
-        var ipAdresses = "";
+        var ipAdress = '';
+        var fields = '*';
+        var excludes = '';
+        var lang = 'en';
+        var ipAdresses = [];
     }
 
-    setIPAddress(ipAddress = "") {
+    setIPAddress(ipAddress = '') {
         this.ipAdress = ipAddress;
     }
 
@@ -16,7 +16,7 @@ module.exports = class GeolocationParams  {
         return this.ipAdress;
     }
 
-    setFields(fields = "") {
+    setFields(fields = '*') {
         this.fields = fields;
     }
 
@@ -24,7 +24,7 @@ module.exports = class GeolocationParams  {
         return this.fields;
     }
 
-    setExcludes(excludes = "") {
+    setExcludes(excludes = '') {
         this.excludes = excludes;
     }
 
@@ -32,7 +32,7 @@ module.exports = class GeolocationParams  {
         return this.excludes;
     }
 
-    setLang(lang = "en") {
+    setLang(lang = 'en') {
         this.lang = lang;
     }
 

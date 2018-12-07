@@ -36,7 +36,7 @@ $ npm install ip-geolocation-api-javascript-sdk
 ### Setup API
 
 ```javascript
-var IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk');
+var IPGeolocationAPI = require('ip-geolocation-api-javascript-sdk/IPGeolocationAPI');
 
 // Create IPGeolocationAPI object, passing your valid API key (optional) and async requests mode (optional, default: true)
 var ipgeolocationApi = new IPGeolocationAPI("YOUR_API_KEY");
