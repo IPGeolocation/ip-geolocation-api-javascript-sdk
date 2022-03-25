@@ -4,3 +4,4 @@ node_modules/
 # files
 package-lock.json
 Test.*
+index.js
