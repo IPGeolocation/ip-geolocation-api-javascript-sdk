@@ -6,6 +6,7 @@ module.exports = class TimezoneParams {
         var lang = 'en';
         var latitude = '1000.0';
         var longitude = '1000.0';
+        var location = "";
     }
 
     setTimezone(tz = '') {
@@ -32,9 +33,11 @@ module.exports = class TimezoneParams {
         return this.lang;
     }
 
-    setCoordinates(latitude = '1000.0', longitude = '1000.0') {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    setCoordinates(la = '1000.0', lo = '1000.0') {
+        if ((la >= -90 && la <= 90) && (lo >= -180 && lo <= 180)) {
+            this.latitude = la;
+            this.longitude = lo;
+        }
     }
 
     getLatitude() {
@@ -43,6 +46,12 @@ module.exports = class TimezoneParams {
 
     getLongitude() {
         return this.longitude;
+    }
+    getLocation() {
+        return this.location;
+    }
+    setLocation(loc = "") {
+        this.location = loc;
     }
 }
 
