@@ -25,21 +25,17 @@ module.exports = class IPGeolocationAPI {
     }
 
     getUserAgent(callback, uaString ="") {
-        var jsonData = "{\"uaString\":\"" + uaString + "\"}";
+        var jsonData = JSON.stringify({
+            "uaString": uaString
+        });
+
         postRequest('user-agent', "apiKey=" + this.apiKey, jsonData, callback);
     }
 
     getBulkUserAgent(callback, uaStrings = []) {
-        var jsonData = "{\"uaStrings\":[";
-        for(let i = 0; i < uaStrings.length; i++){
-            if(i === 0){
-                jsonData = jsonData.concat("\"" + uaStrings[i] + "\"");
-            } else{
-                jsonData = jsonData.concat(",");
-                jsonData = jsonData.concat("\"" + uaStrings[i] + "\"");
-            }
-        }
-        jsonData = jsonData.concat("]}");
+        var jsonData = JSON.stringify({
+            "uaStrings": uaStrings
+        });
 
         postRequest('user-agent-bulk', "apiKey=" + this.apiKey, jsonData, callback);
     }
@@ -96,6 +92,7 @@ function buildGeolocationUrlParams(apiKey = '', geolocationParams = null) {
         if (geolocationParams.isIncludeHostname() || geolocationParams.isIncludeHostnameFallbackLive() || geolocationParams.isIncludeLiveHostname() || geolocationParams.isIncludeSecurity() || geolocationParams.isIncludeUserAgent()) {
             var val = "";
             var includeHost = false;
+
             if (geolocationParams.isIncludeHostname()) {
                 val = "hostname";
                 includeHost = true;
@@ -106,6 +103,7 @@ function buildGeolocationUrlParams(apiKey = '', geolocationParams = null) {
                 val = "liveHostname";
                 includeHost = true;
             }
+            
             if (geolocationParams.isIncludeSecurity()) {
                 if (includeHost) {
                     val = val + ",security";
@@ -113,6 +111,7 @@ function buildGeolocationUrlParams(apiKey = '', geolocationParams = null) {
                     val = "security";
                 }
             }
+            
             if (geolocationParams.isIncludeUserAgent()) {
                 if (includeHost || geolocationParams.isIncludeSecurity()) {
                     val = val + ",useragent";
@@ -120,14 +119,17 @@ function buildGeolocationUrlParams(apiKey = '', geolocationParams = null) {
                     val = "useragent";
                 }
             }
+            
             if (urlParams) {
                 urlParams = urlParams.concat('&');
             }
+            
             urlParams = urlParams.concat('include=', val);
 
         }
 
     }
+
     return urlParams;
 }
 
@@ -167,6 +169,7 @@ function buildTimezoneUrlParams(apiKey = '', timezoneParams = null) {
             if (urlParams) {
                 urlParams = urlParams.concat('&');
             }
+            
             urlParams = urlParams.concat('lat=', timezoneParams.getLatitude(), '&long=', timezoneParams.getLongitude());
         }
 
