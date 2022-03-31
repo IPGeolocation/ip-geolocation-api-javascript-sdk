@@ -163,13 +163,11 @@ function buildTimezoneUrlParams(apiKey = '', timezoneParams = null) {
             urlParams = urlParams.concat('location=', timezoneParams.getLocation());
         }
 
-        if (timezoneParams.getLatitude() !== '1000.0' && timezoneParams.getLongitude() !== '1000.0') {
-            if ((timezoneParams.getLatitude() >= -90 && timezoneParams.getLatitude() <= 90) && (timezoneParams.getLongitude() >= -180 && timezoneParams.getLongitude() <= 180)) {
-                if (urlParams) {
-                    urlParams = urlParams.concat('&');
-                }
-                urlParams = urlParams.concat('lat=', timezoneParams.getLatitude(), '&long=', timezoneParams.getLongitude());
+        if ((timezoneParams.getLatitude() >= -90 && timezoneParams.getLatitude() <= 90) && (timezoneParams.getLongitude() >= -180 && timezoneParams.getLongitude() <= 180)) {
+            if (urlParams) {
+                urlParams = urlParams.concat('&');
             }
+            urlParams = urlParams.concat('lat=', timezoneParams.getLatitude(), '&long=', timezoneParams.getLongitude());
         }
 
         if (timezoneParams.getLang()) {
