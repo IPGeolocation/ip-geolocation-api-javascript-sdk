@@ -196,7 +196,13 @@ function getRequest(subUrl, urlParams = '', callback) {
                     'message': 'Internet is not connected!'
                 };
             } else {
-                jsonData = JSON.parse(this.responseText);
+                try {
+                    jsonData = JSON.parse(this.responseText);
+                } catch {
+                    jsonData = {
+                        'message': 'ipgeolocation.io seems to respond unexpectedly!'
+                    };
+                }
             }
 
             if (callback && typeof (callback) === typeof (Function)) {
