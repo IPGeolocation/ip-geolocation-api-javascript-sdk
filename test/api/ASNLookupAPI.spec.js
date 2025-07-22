@@ -14,15 +14,18 @@ const {ASNLookupAPI, APIClient} = require("../../src");
 
     beforeEach(function() {
       const client = new APIClient()
-      client.authentications['ApiKeyAuth'].apiKey = '481060d9cb8a4813a40f2720caa8de74';
+      client.authentications['ApiKeyAuth'].apiKey = 'API_KEY';
       api = new ASNLookupAPI(client);
     });
     describe('getAsnInfo', function() {
       it('should call getAsnInfo successfully', function(done) {
         api.getAsnInfo(
             {
-              asn: 12,
-              include: 'peers,downstreams,upstreams,routes,whois_response'
+              ip: null,
+              asn: null,
+              include: null,
+              excludes: null,
+              fields: null
             },
             (error, data, response) => {
               if (error) {

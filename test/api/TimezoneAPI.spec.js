@@ -11,13 +11,22 @@ const {APIClient, TimezoneAPI} = require("../../src");
 
     beforeEach(function() {
       const client = new APIClient()
-      client.authentications['ApiKeyAuth'].apiKey = '1b17884ee4a148eca83590f178ae0628';
+      client.authentications['ApiKeyAuth'].apiKey = 'API_KEY';
       api = new TimezoneAPI(client);
     });
     describe('getTimezoneInfo', function() {
       it('should call getTimezoneInfo successfully', function(done) {
         api.getTimezoneInfo({
-          loCode: 'ESBCN'
+          tz: null,
+          location: null,
+          lat: null,
+          _long: null,
+          ip: null,
+          iataCode: null,
+          icaoCode: null,
+          loCode: null,
+          output: null,
+          lang: null
         }, (error, data, response) => {
           if (error) {
             console.error('Exception when calling TimezoneAPI->getTimezoneInfo:', error);

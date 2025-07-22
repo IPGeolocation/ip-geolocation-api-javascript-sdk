@@ -11,7 +11,7 @@ describe('UserAgentAPI', function() {
 
     beforeEach(function() {
       const client = new APIClient()
-      client.authentications['ApiKeyAuth'].apiKey = 'a3fbecf6536a470b8d3426419f21ae99';
+      client.authentications['ApiKeyAuth'].apiKey = 'API_KEY';
       api = new UserAgentAPI(client);
     });
     describe('getUserAgentDetails', function() {
@@ -48,17 +48,17 @@ describe('UserAgentAPI', function() {
     });
     describe('parseUserAgentString', function() {
       it('should call parseUserAgentString successfully', function(done) {
-        // const opts = {
-        //   userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
-        // };
-        //
-        // api.getUserAgentDetails(opts, (error, data, response) => {
-        //   if (error) {
-        //     console.error('Exception when calling UserAgentAPI->getUserAgentDetails:', error);
-        //   } else {
-        //     console.log(JSON.stringify(data, null, 2));
-        //   }
-        // });
+        const opts = {
+          userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+        };
+
+        api.getUserAgentDetails(opts, (error, data, response) => {
+          if (error) {
+            console.error('Exception when calling UserAgentAPI->getUserAgentDetails:', error);
+          } else {
+            console.log(JSON.stringify(data, null, 2));
+          }
+        });
         done();
       });
     });

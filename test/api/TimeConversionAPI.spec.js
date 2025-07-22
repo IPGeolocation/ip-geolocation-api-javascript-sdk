@@ -11,15 +11,27 @@ describe('TimeConversionAPI', function() {
 
     beforeEach(function() {
       const client = new APIClient()
-      client.authentications['ApiKeyAuth'].apiKey = '1b17884ee4a148eca83590f178ae0628';
+      client.authentications['ApiKeyAuth'].apiKey = 'API_KEY';
       api = new TimeConversionAPI(client);
     });
     describe('convertTimeBetweenTimezones', function() {
       it('should call convertTimeBetweenTimezones successfully', function(done) {
         const opts = {
-          time: "2024-12-08 11:00",
-          tzFrom: "America/New_York",
-          tzTo: "Asia/Tokyo"
+          time: null,
+          tzFrom: null,
+          tzTo: null,
+          latFrom: null,
+          longFrom: null,
+          latTo: null,
+          longTo: null,
+          locationFrom: null,
+          locationTo: null,
+          icaoFrom: null,
+          icaoTo: null,
+          iataFrom: null,
+          iataTo: null,
+          locodeFrom: null,
+          locodeTo: null,
         };
 
         api.convertTimeBetweenTimezones(opts, (error, data, response) => {
