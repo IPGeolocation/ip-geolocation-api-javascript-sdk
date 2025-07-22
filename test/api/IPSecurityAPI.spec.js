@@ -14,7 +14,7 @@ const BulkIPRequest = require("../../src/models/BulkIPRequest");
 
     beforeEach(function() {
       const client = new APIClient();
-      client.authentications['ApiKeyAuth'].apiKey = 'def295e418bb47c891bb1bc279419c67';
+      client.authentications['ApiKeyAuth'].apiKey = 'API_KEY';
       api = new IPSecurityAPI(client);
     });
     describe('getBulkIpSecurityInfo', function() {
@@ -23,8 +23,11 @@ const BulkIPRequest = require("../../src/models/BulkIPRequest");
         bulkRequest.ips = ['2.56.188.34', '2.56.188.3511'];
 
         api.getBulkIpSecurityInfo(bulkRequest, {
-          include: 'location,network',
-          fields: 'location.country_name'
+          include: null,
+          fields: null,
+          excludes: null,
+          lang: null,
+          output: null
         }, (error, data) => {
           if (error) return console.error('API call failed:', error);
           console.log(JSON.stringify(data, null, 2));
@@ -34,14 +37,17 @@ const BulkIPRequest = require("../../src/models/BulkIPRequest");
     });
     describe('getIpSecurityInfo', function() {
       it('should call getIpSecurityInfo successfully', function(done) {
-        // api.getIpSecurityInfo({
-        //   ip: '195.154.221.54',
-        //   fields: 'security.is_tor,security.is_proxy,security.is_bot,security.is_spam'
-        // }, (error, data) => {
-        //   if (error) return console.error('API call failed:', error);
-        //   console.log(JSON.stringify(data, null, 2));
-        // });
-
+        api.getIpSecurityInfo({
+          ip: null,
+          fields: null,
+          include: null,
+          excludes: null,
+          lang: null,
+          output: null
+        }, (error, data) => {
+          if (error) return console.error('API call failed:', error);
+          console.log(JSON.stringify(data, null, 2));
+        });
         done();
       });
     });

@@ -5,9 +5,9 @@
 
  */
 
-const APIClient = require('../APIClient.js');
+const APIClient = require('../APIClient');
 const Astronomy = require('./Astronomy');
-const TimezoneLocation = require('./TimezoneLocation');
+const AstronomyLocation = require('./AstronomyLocation');
 
 /**
  * The AstronomyResponse model module.
@@ -47,7 +47,7 @@ class AstronomyResponse {
                 obj['ip'] = APIClient.convertToType(data['ip'], 'String');
             }
             if (data.hasOwnProperty('location')) {
-                obj['location'] = TimezoneLocation.constructFromObject(data['location']);
+                obj['location'] = AstronomyLocation.constructFromObject(data['location']);
             }
             if (data.hasOwnProperty('astronomy')) {
                 obj['astronomy'] = Astronomy.constructFromObject(data['astronomy']);
@@ -68,7 +68,7 @@ class AstronomyResponse {
         }
         // validate the optional field `location`
         if (data['location']) { // data not null
-          TimezoneLocation.validateJSON(data['location']);
+          AstronomyLocation.validateJSON(data['location']);
         }
         // validate the optional field `astronomy`
         if (data['astronomy']) { // data not null
@@ -89,7 +89,7 @@ class AstronomyResponse {
 AstronomyResponse.prototype['ip'] = undefined;
 
 /**
- * @member {module:models/TimezoneLocation} location
+ * @member {module:models/AstronomyLocation} location
  */
 AstronomyResponse.prototype['location'] = undefined;
 

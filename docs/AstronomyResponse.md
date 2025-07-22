@@ -1,11 +1,11 @@
-# AstronomyResponse
+# IpGeolocationIoIpIntelligenceProducts.AstronomyResponse
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ip** | **String** |  | [optional] 
-**location** | [**TimezoneLocation**](TimezoneLocation.md) |  | [optional] 
+**location** | [**AstronomyLocation**](AstronomyLocation.md) |  | [optional] 
 **astronomy** | [**Astronomy**](Astronomy.md) |  | [optional] 
 
 

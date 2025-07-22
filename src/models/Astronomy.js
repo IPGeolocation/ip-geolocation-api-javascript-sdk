@@ -5,7 +5,9 @@
 
  */
 
-const APIClient = require('../APIClient.js');
+const APIClient = require('../APIClient');
+const AstronomyEvening = require('./AstronomyEvening');
+const AstronomyMorning = require('./AstronomyMorning');
 
 /**
  * The Astronomy model module.
@@ -42,16 +44,31 @@ class Astronomy {
             obj = obj || new Astronomy();
 
             if (data.hasOwnProperty('date')) {
-                obj['date'] = APIClient.convertToType(data['date'], 'Date');
+                obj['date'] = APIClient.convertToType(data['date'], 'String');
             }
             if (data.hasOwnProperty('current_time')) {
                 obj['current_time'] = APIClient.convertToType(data['current_time'], 'String');
+            }
+            if (data.hasOwnProperty('mid_night')) {
+                obj['mid_night'] = APIClient.convertToType(data['mid_night'], 'String');
+            }
+            if (data.hasOwnProperty('night_end')) {
+                obj['night_end'] = APIClient.convertToType(data['night_end'], 'String');
+            }
+            if (data.hasOwnProperty('morning')) {
+                obj['morning'] = AstronomyMorning.constructFromObject(data['morning']);
             }
             if (data.hasOwnProperty('sunrise')) {
                 obj['sunrise'] = APIClient.convertToType(data['sunrise'], 'String');
             }
             if (data.hasOwnProperty('sunset')) {
                 obj['sunset'] = APIClient.convertToType(data['sunset'], 'String');
+            }
+            if (data.hasOwnProperty('evening')) {
+                obj['evening'] = AstronomyEvening.constructFromObject(data['evening']);
+            }
+            if (data.hasOwnProperty('night_begin')) {
+                obj['night_begin'] = APIClient.convertToType(data['night_begin'], 'String');
             }
             if (data.hasOwnProperty('sun_status')) {
                 obj['sun_status'] = APIClient.convertToType(data['sun_status'], 'String');
@@ -70,6 +87,9 @@ class Astronomy {
             }
             if (data.hasOwnProperty('sun_azimuth')) {
                 obj['sun_azimuth'] = APIClient.convertToType(data['sun_azimuth'], 'Number');
+            }
+            if (data.hasOwnProperty('moon_phase')) {
+                obj['moon_phase'] = APIClient.convertToType(data['moon_phase'], 'String');
             }
             if (data.hasOwnProperty('moonrise')) {
                 obj['moonrise'] = APIClient.convertToType(data['moonrise'], 'String');
@@ -92,9 +112,6 @@ class Astronomy {
             if (data.hasOwnProperty('moon_parallactic_angle')) {
                 obj['moon_parallactic_angle'] = APIClient.convertToType(data['moon_parallactic_angle'], 'Number');
             }
-            if (data.hasOwnProperty('moon_phase')) {
-                obj['moon_phase'] = APIClient.convertToType(data['moon_phase'], 'String');
-            }
             if (data.hasOwnProperty('moon_illumination_percentage')) {
                 obj['moon_illumination_percentage'] = APIClient.convertToType(data['moon_illumination_percentage'], 'String');
             }
@@ -112,8 +129,24 @@ class Astronomy {
      */
     static validateJSON(data) {
         // ensure the json data is a string
+        if (data['date'] && !(typeof data['date'] === 'string' || data['date'] instanceof String)) {
+            throw new Error("Expected the field `date` to be a primitive type in the JSON string but got " + data['date']);
+        }
+        // ensure the json data is a string
         if (data['current_time'] && !(typeof data['current_time'] === 'string' || data['current_time'] instanceof String)) {
             throw new Error("Expected the field `current_time` to be a primitive type in the JSON string but got " + data['current_time']);
+        }
+        // ensure the json data is a string
+        if (data['mid_night'] && !(typeof data['mid_night'] === 'string' || data['mid_night'] instanceof String)) {
+            throw new Error("Expected the field `mid_night` to be a primitive type in the JSON string but got " + data['mid_night']);
+        }
+        // ensure the json data is a string
+        if (data['night_end'] && !(typeof data['night_end'] === 'string' || data['night_end'] instanceof String)) {
+            throw new Error("Expected the field `night_end` to be a primitive type in the JSON string but got " + data['night_end']);
+        }
+        // validate the optional field `morning`
+        if (data['morning']) { // data not null
+          AstronomyMorning.validateJSON(data['morning']);
         }
         // ensure the json data is a string
         if (data['sunrise'] && !(typeof data['sunrise'] === 'string' || data['sunrise'] instanceof String)) {
@@ -122,6 +155,14 @@ class Astronomy {
         // ensure the json data is a string
         if (data['sunset'] && !(typeof data['sunset'] === 'string' || data['sunset'] instanceof String)) {
             throw new Error("Expected the field `sunset` to be a primitive type in the JSON string but got " + data['sunset']);
+        }
+        // validate the optional field `evening`
+        if (data['evening']) { // data not null
+          AstronomyEvening.validateJSON(data['evening']);
+        }
+        // ensure the json data is a string
+        if (data['night_begin'] && !(typeof data['night_begin'] === 'string' || data['night_begin'] instanceof String)) {
+            throw new Error("Expected the field `night_begin` to be a primitive type in the JSON string but got " + data['night_begin']);
         }
         // ensure the json data is a string
         if (data['sun_status'] && !(typeof data['sun_status'] === 'string' || data['sun_status'] instanceof String)) {
@@ -136,6 +177,10 @@ class Astronomy {
             throw new Error("Expected the field `day_length` to be a primitive type in the JSON string but got " + data['day_length']);
         }
         // ensure the json data is a string
+        if (data['moon_phase'] && !(typeof data['moon_phase'] === 'string' || data['moon_phase'] instanceof String)) {
+            throw new Error("Expected the field `moon_phase` to be a primitive type in the JSON string but got " + data['moon_phase']);
+        }
+        // ensure the json data is a string
         if (data['moonrise'] && !(typeof data['moonrise'] === 'string' || data['moonrise'] instanceof String)) {
             throw new Error("Expected the field `moonrise` to be a primitive type in the JSON string but got " + data['moonrise']);
         }
@@ -146,10 +191,6 @@ class Astronomy {
         // ensure the json data is a string
         if (data['moon_status'] && !(typeof data['moon_status'] === 'string' || data['moon_status'] instanceof String)) {
             throw new Error("Expected the field `moon_status` to be a primitive type in the JSON string but got " + data['moon_status']);
-        }
-        // ensure the json data is a string
-        if (data['moon_phase'] && !(typeof data['moon_phase'] === 'string' || data['moon_phase'] instanceof String)) {
-            throw new Error("Expected the field `moon_phase` to be a primitive type in the JSON string but got " + data['moon_phase']);
         }
         // ensure the json data is a string
         if (data['moon_illumination_percentage'] && !(typeof data['moon_illumination_percentage'] === 'string' || data['moon_illumination_percentage'] instanceof String)) {
@@ -165,7 +206,7 @@ class Astronomy {
 
 
 /**
- * @member {Date} date
+ * @member {String} date
  */
 Astronomy.prototype['date'] = undefined;
 
@@ -173,6 +214,21 @@ Astronomy.prototype['date'] = undefined;
  * @member {String} current_time
  */
 Astronomy.prototype['current_time'] = undefined;
+
+/**
+ * @member {String} mid_night
+ */
+Astronomy.prototype['mid_night'] = undefined;
+
+/**
+ * @member {String} night_end
+ */
+Astronomy.prototype['night_end'] = undefined;
+
+/**
+ * @member {module:models/AstronomyMorning} morning
+ */
+Astronomy.prototype['morning'] = undefined;
 
 /**
  * @member {String} sunrise
@@ -183,6 +239,16 @@ Astronomy.prototype['sunrise'] = undefined;
  * @member {String} sunset
  */
 Astronomy.prototype['sunset'] = undefined;
+
+/**
+ * @member {module:models/AstronomyEvening} evening
+ */
+Astronomy.prototype['evening'] = undefined;
+
+/**
+ * @member {String} night_begin
+ */
+Astronomy.prototype['night_begin'] = undefined;
 
 /**
  * @member {String} sun_status
@@ -213,6 +279,11 @@ Astronomy.prototype['sun_distance'] = undefined;
  * @member {Number} sun_azimuth
  */
 Astronomy.prototype['sun_azimuth'] = undefined;
+
+/**
+ * @member {String} moon_phase
+ */
+Astronomy.prototype['moon_phase'] = undefined;
 
 /**
  * @member {String} moonrise
@@ -248,11 +319,6 @@ Astronomy.prototype['moon_azimuth'] = undefined;
  * @member {Number} moon_parallactic_angle
  */
 Astronomy.prototype['moon_parallactic_angle'] = undefined;
-
-/**
- * @member {String} moon_phase
- */
-Astronomy.prototype['moon_phase'] = undefined;
 
 /**
  * @member {String} moon_illumination_percentage

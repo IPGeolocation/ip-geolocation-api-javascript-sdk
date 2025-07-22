@@ -11,14 +11,18 @@ describe('AstronomyAPI', function() {
 
     beforeEach(function() {
       const client = new APIClient()
-      client.authentications['ApiKeyAuth'].apiKey = 'a3fbecf6536a470b8d3426419f21ae99';
+      client.authentications['ApiKeyAuth'].apiKey = 'API_KEY';
       api = new AstronomyAPI(client);
     });
     describe('getAstronomyDetails', function() {
       it('should call getAstronomyDetails successfully', function(done) {
           const options = {
-              ip: '1.1.1.1',
-              lang: 'fr'
+              ip: null,
+              location: null,
+              lat: null,
+              _long: null,
+              date: null,
+              lang: null
           };
 
           api.getAstronomyDetails(options, (error, data, response) => {

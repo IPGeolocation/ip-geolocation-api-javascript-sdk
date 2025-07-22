@@ -3,7 +3,7 @@
 **IPGeolocation** provides a set of APIs to make IP-based decisions and enrich your applications with real-time geolocation, timezone, user-agent, and threat intelligence data.
 
 **API version**: 2.0  
-**Package version**: 2.0.0  
+**Package version**: 2.0.1
 **NPM package**: [`ip-geolocation-api-javascript-sdk`](https://www.npmjs.com/package/ip-geolocation-api-javascript-sdk)
 
 ## Table of Contents
@@ -75,8 +75,8 @@ This is useful if:
   
 In this case, just skip setting the API key, and the API will automatically detect your request origin:
 ```javascript
-const { ApiClient } = require('ip-geolocation-api-javascript-sdk');
-const client = ApiClient.instance;
+const { APIClient } = require('ip-geolocation-api-javascript-sdk');
+const client = APIClient.instance;
 // No API key set — will use request origin
 
 ```
@@ -1515,29 +1515,57 @@ Sample Response:
     "city": "New York",
     "locality": "",
     "latitude": "40.71280",
-    "longitude": "-74.00600"
+    "longitude": "-74.00600",
+    "elevation": "6"
   },
   "astronomy": {
-    "date": "2025-07-17T00:00:00.000Z",
-    "current_time": "11:31:03.873",
-    "sunrise": "05:39",
-    "sunset": "20:25",
+    "date": "2025-07-22",
+    "current_time": "12:08:03.637",
+    "mid_night": "01:02",
+    "night_end": "03:48",
+    "morning": {
+      "astronomical_twilight_begin": "03:48",
+      "astronomical_twilight_end": "04:32",
+      "nautical_twilight_begin": "04:32",
+      "nautical_twilight_end": "05:12",
+      "civil_twilight_begin": "05:12",
+      "civil_twilight_end": "05:43",
+      "blue_hour_begin": "04:59",
+      "blue_hour_end": "05:24",
+      "golden_hour_begin": "05:24",
+      "golden_hour_end": "06:23"
+    },
+    "sunrise": "05:43",
+    "sunset": "20:21",
+    "evening": {
+      "golden_hour_begin": "19:41",
+      "golden_hour_end": "20:40",
+      "blue_hour_begin": "20:40",
+      "blue_hour_end": "21:05",
+      "civil_twilight_begin": "20:21",
+      "civil_twilight_end": "20:52",
+      "nautical_twilight_begin": "20:52",
+      "nautical_twilight_end": "21:31",
+      "astronomical_twilight_begin": "21:31",
+      "astronomical_twilight_end": "22:16"
+    },
+    "night_begin": "22:16",
     "sun_status": "-",
     "solar_noon": "13:02",
-    "day_length": "14:45",
-    "sun_altitude": 62.43958294106399,
-    "sun_distance": 152059278.33947453,
-    "sun_azimuth": 128.58389229977814,
-    "moonrise": "-:-",
-    "moonset": "13:04",
+    "day_length": "14:37",
+    "sun_altitude": 66.36171104779359,
+    "sun_distance": 152012050.7566263,
+    "sun_azimuth": 146.51841856976972,
+    "moon_phase": "WANING_CRESCENT",
+    "moonrise": "02:48",
+    "moonset": "19:10",
     "moon_status": "-",
-    "moon_altitude": 16.83815539603158,
-    "moon_distance": 371421.6510993104,
-    "moon_azimuth": 269.32094886584605,
-    "moon_parallactic_angle": 50.397377251512694,
-    "moon_phase": "LAST_QUARTER",
-    "moon_illumination_percentage": "-54.35",
-    "moon_angle": 265.00460865965664
+    "moon_altitude": 71.91067852938512,
+    "moon_distance": 370332.8633592859,
+    "moon_azimuth": 232.18896241301334,
+    "moon_parallactic_angle": 42.90572861876801,
+    "moon_illumination_percentage": "-5.82",
+    "moon_angle": 332.0715969163789
   }
 }
 ```
@@ -1571,29 +1599,57 @@ Sample Response:
     "locality": "Charleston Terrace",
     "zipcode": "94043-1351",
     "latitude": "37.42240",
-    "longitude": "-122.08421"
+    "longitude": "-122.08421",
+    "elevation": "3"
   },
   "astronomy": {
-    "date": "2025-07-17T00:00:00.000Z",
-    "current_time": "08:34:23.692",
-    "sunrise": "06:00",
-    "sunset": "20:28",
+    "date": "2025-07-22",
+    "current_time": "09:08:38.573",
+    "mid_night": "01:15",
+    "night_end": "04:18",
+    "morning": {
+      "astronomical_twilight_begin": "04:18",
+      "astronomical_twilight_end": "04:58",
+      "nautical_twilight_begin": "04:58",
+      "nautical_twilight_end": "05:35",
+      "civil_twilight_begin": "05:35",
+      "civil_twilight_end": "06:04",
+      "blue_hour_begin": "05:23",
+      "blue_hour_end": "05:47",
+      "golden_hour_begin": "05:47",
+      "golden_hour_end": "06:42"
+    },
+    "sunrise": "06:04",
+    "sunset": "20:24",
+    "evening": {
+      "golden_hour_begin": "19:46",
+      "golden_hour_end": "20:42",
+      "blue_hour_begin": "20:42",
+      "blue_hour_end": "21:05",
+      "civil_twilight_begin": "20:24",
+      "civil_twilight_end": "20:54",
+      "nautical_twilight_begin": "20:54",
+      "nautical_twilight_end": "21:30",
+      "astronomical_twilight_begin": "21:30",
+      "astronomical_twilight_end": "22:10"
+    },
+    "night_begin": "22:10",
     "sun_status": "-",
     "solar_noon": "13:14",
-    "day_length": "14:27",
-    "sun_altitude": 28.120272662905446,
-    "sun_distance": 152059278.33947453,
-    "sun_azimuth": 84.00915469369778,
-    "moonrise": "-:-",
-    "moonset": "13:22",
+    "day_length": "14:20",
+    "sun_altitude": 34.34803129267899,
+    "sun_distance": 152012050.75662628,
+    "sun_azimuth": 89.8970525672089,
+    "moon_phase": "WANING_CRESCENT",
+    "moonrise": "03:23",
+    "moonset": "19:16",
     "moon_status": "-",
-    "moon_altitude": 52.17860291184627,
-    "moon_distance": 371417.4136271126,
-    "moon_azimuth": 231.9946220147715,
-    "moon_parallactic_angle": 39.506402785828534,
-    "moon_phase": "LAST_QUARTER",
-    "moon_illumination_percentage": "-54.33",
-    "moon_angle": 265.03491087395025
+    "moon_altitude": 62.034455712206615,
+    "moon_distance": 370333.6185030786,
+    "moon_azimuth": 99.42513011330385,
+    "moon_parallactic_angle": -62.958244692944554,
+    "moon_illumination_percentage": "-5.82",
+    "moon_angle": 332.0769921001466
   }
 }
 ```
@@ -1618,29 +1674,57 @@ Sample Response:
     "city": "Milan",
     "locality": "",
     "latitude": "45.46419",
-    "longitude": "9.18963"
+    "longitude": "9.18963",
+    "elevation": "122"
   },
   "astronomy": {
-    "date": "2025-07-17T00:00:00.000Z",
-    "current_time": "17:36:42.745",
-    "sunrise": "05:49",
-    "sunset": "21:09",
+    "date": "2025-07-22",
+    "current_time": "18:09:10.992",
+    "mid_night": "01:29",
+    "night_end": "03:39",
+    "morning": {
+      "astronomical_twilight_begin": "03:39",
+      "astronomical_twilight_end": "04:35",
+      "nautical_twilight_begin": "04:35",
+      "nautical_twilight_end": "05:21",
+      "civil_twilight_begin": "05:21",
+      "civil_twilight_end": "05:54",
+      "blue_hour_begin": "05:06",
+      "blue_hour_end": "05:35",
+      "golden_hour_begin": "05:35",
+      "golden_hour_end": "06:40"
+    },
+    "sunrise": "05:54",
+    "sunset": "21:04",
+    "evening": {
+      "golden_hour_begin": "20:19",
+      "golden_hour_end": "21:24",
+      "blue_hour_begin": "21:24",
+      "blue_hour_end": "21:52",
+      "civil_twilight_begin": "21:04",
+      "civil_twilight_end": "21:38",
+      "nautical_twilight_begin": "21:38",
+      "nautical_twilight_end": "22:23",
+      "astronomical_twilight_begin": "22:23",
+      "astronomical_twilight_end": "23:18"
+    },
+    "night_begin": "23:18",
     "sun_status": "-",
     "solar_noon": "13:29",
-    "day_length": "15:20",
-    "sun_altitude": 34.4375529178136,
-    "sun_distance": 152059278.33947453,
-    "sun_azimuth": 265.67875410561135,
-    "moonrise": "-:-",
-    "moonset": "13:22",
+    "day_length": "15:10",
+    "sun_altitude": 28.169856679888845,
+    "sun_distance": 152012050.75662634,
+    "sun_azimuth": 270.6983052183797,
+    "moon_phase": "WANING_CRESCENT",
+    "moonrise": "02:36",
+    "moonset": "19:49",
     "moon_status": "-",
-    "moon_altitude": -31.660729063999725,
-    "moon_distance": 371414.46618635,
-    "moon_azimuth": 338.20944924001776,
-    "moon_parallactic_angle": 15.348218557957148,
-    "moon_phase": "LAST_QUARTER",
-    "moon_illumination_percentage": "-54.31",
-    "moon_angle": 265.0559985041169
+    "moon_altitude": 13.689479853567155,
+    "moon_distance": 370334.31938040146,
+    "moon_azimuth": 296.84370445526883,
+    "moon_parallactic_angle": 45.350334161659966,
+    "moon_illumination_percentage": "-5.82",
+    "moon_angle": 332.08199856245204
   }
 }
 ```
@@ -1667,29 +1751,57 @@ Sample Response:
     "city": "Brisbane",
     "locality": "Brisbane",
     "latitude": "-27.47000",
-    "longitude": "153.02000"
+    "longitude": "153.02000",
+    "elevation": ""
   },
   "astronomy": {
-    "date": "2025-01-01T00:00:00.000Z",
-    "current_time": "01:59:24.270",
-    "sunrise": "06:36",
-    "sunset": "17:12",
+    "date": "2025-01-01",
+    "current_time": "02:09:51.517",
+    "mid_night": "23:51",
+    "night_end": "03:24",
+    "morning": {
+      "astronomical_twilight_begin": "03:24",
+      "astronomical_twilight_end": "03:57",
+      "nautical_twilight_begin": "03:57",
+      "nautical_twilight_end": "04:29",
+      "civil_twilight_begin": "04:29",
+      "civil_twilight_end": "04:56",
+      "blue_hour_begin": "04:19",
+      "blue_hour_end": "04:40",
+      "golden_hour_begin": "04:40",
+      "golden_hour_end": "05:30"
+    },
+    "sunrise": "04:56",
+    "sunset": "18:46",
+    "evening": {
+      "golden_hour_begin": "18:12",
+      "golden_hour_end": "19:02",
+      "blue_hour_begin": "19:02",
+      "blue_hour_end": "19:23",
+      "civil_twilight_begin": "18:46",
+      "civil_twilight_end": "19:13",
+      "nautical_twilight_begin": "19:13",
+      "nautical_twilight_end": "19:45",
+      "astronomical_twilight_begin": "19:45",
+      "astronomical_twilight_end": "20:18"
+    },
+    "night_begin": "20:18",
     "sun_status": "-",
-    "solar_noon": "11:54",
-    "day_length": "10:36",
-    "sun_altitude": -30.783777296483137,
-    "sun_distance": 147102938.8803657,
-    "sun_azimuth": 145.36586311659204,
-    "moonrise": "-:-",
-    "moonset": "11:07",
-    "moon_status": "-",
-    "moon_altitude": -31.941455787263955,
-    "moon_distance": 383112.40264394664,
-    "moon_azimuth": 157.15022252570407,
-    "moon_parallactic_angle": -157.30919347190755,
+    "solar_noon": "11:51",
+    "day_length": "13:50",
+    "sun_altitude": -29.4286928132231,
+    "sun_distance": 147102938.88036567,
+    "sun_azimuth": 143.06960395892196,
     "moon_phase": "NEW_MOON",
-    "moon_illumination_percentage": "0.61",
-    "moon_angle": 8.949588505035496
+    "moonrise": "05:42",
+    "moonset": "20:08",
+    "moon_status": "-",
+    "moon_altitude": -31.0476016259822,
+    "moon_distance": 383086.6727028855,
+    "moon_azimuth": 154.73430237040986,
+    "moon_parallactic_angle": -154.91634180109617,
+    "moon_illumination_percentage": "0.62",
+    "moon_angle": 9.03930980357242
   }
 }
 ```
@@ -1715,39 +1827,67 @@ Sample Response:
     "continent_name": "Océanie",
     "country_code2": "AU",
     "country_code3": "AUS",
-    "country_name": "",
+    "country_name": "Australie",
     "country_name_official": "",
     "is_eu": false,
     "state_prov": "Queensland",
     "state_code": "AU-QLD",
     "district": "Brisbane",
-    "city": "South Brisbane",
+    "city": "Brisbane Sud",
     "locality": "",
     "zipcode": "4101",
     "latitude": "-27.47306",
-    "longitude": "153.01421"
+    "longitude": "153.01421",
+    "elevation": ""
   },
   "astronomy": {
-    "date": "2025-07-18T00:00:00.000Z",
-    "current_time": "02:17:43.130",
-    "sunrise": "06:36",
-    "sunset": "17:12",
+    "date": "2025-07-23",
+    "current_time": "02:10:35.820",
+    "mid_night": "23:54",
+    "night_end": "05:12",
+    "morning": {
+      "astronomical_twilight_begin": "05:12",
+      "astronomical_twilight_end": "05:40",
+      "nautical_twilight_begin": "05:40",
+      "nautical_twilight_end": "06:09",
+      "civil_twilight_begin": "06:09",
+      "civil_twilight_end": "06:34",
+      "blue_hour_begin": "05:59",
+      "blue_hour_end": "06:18",
+      "golden_hour_begin": "06:18",
+      "golden_hour_end": "07:08"
+    },
+    "sunrise": "06:34",
+    "sunset": "17:15",
+    "evening": {
+      "golden_hour_begin": "16:41",
+      "golden_hour_end": "17:30",
+      "blue_hour_begin": "17:30",
+      "blue_hour_end": "17:49",
+      "civil_twilight_begin": "17:15",
+      "civil_twilight_end": "17:39",
+      "nautical_twilight_begin": "17:39",
+      "nautical_twilight_end": "18:08",
+      "astronomical_twilight_begin": "18:08",
+      "astronomical_twilight_end": "18:36"
+    },
+    "night_begin": "18:36",
     "sun_status": "-",
     "solar_noon": "11:54",
-    "day_length": "10:36",
-    "sun_altitude": -56.78957396734283,
-    "sun_distance": 152051279.3245535,
-    "sun_azimuth": 93.131233666355,
-    "moonrise": "-:-",
-    "moonset": "11:07",
+    "day_length": "10:40",
+    "sun_altitude": -58.11703247517492,
+    "sun_distance": 152000449.99796307,
+    "sun_azimuth": 95.84071235655404,
+    "moon_phase": "WANING_CRESCENT",
+    "moonrise": "05:08",
+    "moonset": "15:24",
     "moon_status": "-",
-    "moon_altitude": 32.18279210841823,
-    "moon_distance": 371362.504253253,
-    "moon_azimuth": 55.18965546016517,
-    "moon_parallactic_angle": -132.18299046742257,
-    "moon_phase": "LAST_QUARTER",
-    "moon_illumination_percentage": "-53.98",
-    "moon_angle": 265.4291849088062
+    "moon_altitude": -34.311357641550224,
+    "moon_distance": 370336.15393693856,
+    "moon_azimuth": 72.88904329514799,
+    "moon_parallactic_angle": -105.42137124967556,
+    "moon_illumination_percentage": "-5.81",
+    "moon_angle": 332.095098449164
   }
 }
 ```
@@ -1870,6 +2010,9 @@ Sample Response:
  - [ASNDetails](docs/ASNDetails.md)
  - [Abuse](docs/Abuse.md)
  - [AbuseResponse](docs/AbuseResponse.md)
+ - [AstronomyEvening](docs/AstronomyEvening.md)
+ - [AstronomyLocation](docs/AstronomyLocation.md)
+ - [AstronomyMorning](docs/AstronomyMorning.md)
  - [Astronomy](docs/Astronomy.md)
  - [AstronomyResponse](docs/AstronomyResponse.md)
  - [CountryMetadata](docs/CountryMetadata.md)
