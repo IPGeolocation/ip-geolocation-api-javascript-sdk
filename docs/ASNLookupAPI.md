@@ -33,7 +33,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#authentication-setup)
+[ApiKeyAuth](../README.md#apikeyauth)
 
 ### HTTP request headers
 
