@@ -75,7 +75,7 @@ Based on:
 
 
 ## Requirements
-- NPM or Yarm Package manager 
+- NPM or Yarn Package manager 
 - API Key from [IPGeolocation.io](https://ipgeolocation.io)
 
 ## Installation
