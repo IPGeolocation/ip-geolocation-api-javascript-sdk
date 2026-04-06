@@ -34,25 +34,25 @@ Works in Node.js 18+ and in other runtimes that already provide `fetch`.
 ## Installation
 
 ```bash
-npm install @ipgeolocation/ip-geolocation-js-sdk
+npm install ip-geolocation-api-javascript-sdk
 ```
 
 ### ES Modules
 
 ```js
-import { IpGeolocationClient } from "@ipgeolocation/ip-geolocation-js-sdk";
+import { IpGeolocationClient } from "ip-geolocation-api-javascript-sdk";
 ```
 
 ### CommonJS
 
 ```js
-const { IpGeolocationClient } = require("@ipgeolocation/ip-geolocation-js-sdk");
+const { IpGeolocationClient } = require("ip-geolocation-api-javascript-sdk");
 ```
 
 ## Quick Start
 
 ```js
-import { IpGeolocationClient } from "@ipgeolocation/ip-geolocation-js-sdk";
+import { IpGeolocationClient } from "ip-geolocation-api-javascript-sdk";
 
 async function main() {
   const client = new IpGeolocationClient({
@@ -85,7 +85,7 @@ You can pass plain objects to request methods. If you want validation before the
 
 | Item | Value |
 |------|-------|
-| Package | `@ipgeolocation/ip-geolocation-js-sdk` |
+| Package | `ip-geolocation-api-javascript-sdk` |
 | API Type | IPGeolocation IP Location API |
 | Supported Endpoints | `/v3/ipgeo`, `/v3/ipgeo-bulk` |
 | Supported Inputs | IPv4, IPv6, domain |
@@ -223,7 +223,7 @@ You can also pass a custom `HttpTransport` as the second constructor argument.
 The examples below assume you already have a configured client and are running inside an async function or an ESM module with top-level `await`:
 
 ```js
-import { IpGeolocationClient } from "@ipgeolocation/ip-geolocation-js-sdk";
+import { IpGeolocationClient } from "ip-geolocation-api-javascript-sdk";
 
 const client = new IpGeolocationClient({
   apiKey: process.env.IPGEO_API_KEY,
@@ -320,7 +320,7 @@ If you want request validation before sending the call, create the request expli
 import {
   IpGeolocationClient,
   LookupIpGeolocationRequest,
-} from "@ipgeolocation/ip-geolocation-js-sdk";
+} from "ip-geolocation-api-javascript-sdk";
 
 const client = new IpGeolocationClient({
   apiKey: process.env.IPGEO_API_KEY,
@@ -361,7 +361,7 @@ Use raw methods when you want the original response body as a string.
 import {
   IpGeolocationClient,
   ResponseFormat,
-} from "@ipgeolocation/ip-geolocation-js-sdk";
+} from "ip-geolocation-api-javascript-sdk";
 
 const client = new IpGeolocationClient({
   apiKey: process.env.IPGEO_API_KEY,
@@ -455,7 +455,7 @@ console.log(response.metadata.firstHeaderValue("x-ratelimit-remaining"));
 Use `toJson()` or `toPrettyJson()` when you want a stable JSON view of SDK objects.
 
 ```js
-import { toPrettyJson } from "@ipgeolocation/ip-geolocation-js-sdk";
+import { toPrettyJson } from "ip-geolocation-api-javascript-sdk";
 
 const response = await client.lookupIpGeolocation({
   ip: "8.8.8.8",
@@ -501,7 +501,7 @@ import {
   IpGeolocationClient,
   RateLimitError,
   UnauthorizedError,
-} from "@ipgeolocation/ip-geolocation-js-sdk";
+} from "ip-geolocation-api-javascript-sdk";
 
 const client = new IpGeolocationClient({
   apiKey: process.env.IPGEO_API_KEY,
@@ -585,12 +585,12 @@ No. Typed methods require JSON. Use raw methods if you need XML.
 
 ## Related Packages
 
-- TypeScript runtime SDK: `@ipgeolocation/ip-geolocation-ts-sdk`
-- TypeScript types-only package: `@ipgeolocation/ip-geolocation-types`
+- TypeScript runtime SDK: `ip-geolocation-api-sdk-typescript`
+- TypeScript types-only package: `ip-geolocation-api-typescript-types`
 
 ## Links
 
-- [npm package](https://www.npmjs.com/package/@ipgeolocation/ip-geolocation-js-sdk)
+- [npm package](https://www.npmjs.com/package/ip-geolocation-api-javascript-sdk)
 - [GitHub repository](https://github.com/IPGeolocation/ip-geolocation-api-javascript-sdk)
 - [API documentation](https://ipgeolocation.io/documentation/ip-location-api.html)
 - [Pricing](https://ipgeolocation.io/pricing.html)
