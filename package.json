@@ -1,7 +1,7 @@
 {
   "author": "IPGeolocation.io",
   "name": "ip-geolocation-api-javascript-sdk",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Official JavaScript SDK for the IPGeolocation IP Location API with single and bulk lookup, typed JSON, and raw JSON/XML support.",
   "license": "MIT",
   "type": "module",
