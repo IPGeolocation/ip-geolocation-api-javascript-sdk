@@ -1,46 +1,29 @@
 {
   "author": "IPGeolocation.io",
-  "name": "ip-geolocation-api-javascript-sdk",
-  "version": "2.0.1",
-  "description": "Official JavaScript SDK for IPGeolocation.io. Effortlessly integrate IP Geolocation, IP Security, Timezone, ASN, Astronomy, User Agent, Abuse Contact, and Timezone Conversion APIs into your Node.js applications.",
-  "license": "ISC",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "babel src -d dist",
-    "prepare": "npm run build",
-    "test": "mocha --require @babel/register --recursive"
+  "name": "@ipgeolocation/ip-geolocation-js-sdk",
+  "version": "3.0.0",
+  "description": "Official JavaScript SDK for the IPGeolocation IP Location API with single and bulk lookup, typed JSON, and raw JSON/XML support.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
   },
-  "browser": {
-    "fs": false
-  },
-  "dependencies": {
-    "@babel/cli": "^7.0.0",
-    "ip-geolocation-api-javascript-sdk": "^1.0.9",
-    "superagent": "^5.3.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
-    "@babel/plugin-proposal-decorators": "^7.0.0",
-    "@babel/plugin-proposal-do-expressions": "^7.0.0",
-    "@babel/plugin-proposal-export-default-from": "^7.0.0",
-    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
-    "@babel/plugin-proposal-function-bind": "^7.0.0",
-    "@babel/plugin-proposal-function-sent": "^7.0.0",
-    "@babel/plugin-proposal-json-strings": "^7.0.0",
-    "@babel/plugin-proposal-logical-assignment-operators": "^7.0.0",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
-    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
-    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
-    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
-    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/plugin-syntax-import-meta": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "expect.js": "^0.3.1",
-    "mocha": "^11.7.1",
-    "sinon": "^7.2.0"
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -50,7 +33,46 @@
     "url": "https://github.com/IPGeolocation/ip-geolocation-api-javascript-sdk/issues"
   },
   "homepage": "https://github.com/IPGeolocation/ip-geolocation-api-javascript-sdk#readme",
-  "files": [
-    "dist"
-  ]
+  "keywords": [
+    "ipgeolocation",
+    "geolocation",
+    "ip",
+    "ip-location",
+    "ip-geolocation",
+    "ip-lookup",
+    "api",
+    "sdk",
+    "javascript",
+    "nodejs",
+    "fetch",
+    "timezone",
+    "hostname",
+    "user-agent",
+    "asn",
+    "security",
+    "vpn-detection",
+    "proxy-detection",
+    "bulk-lookup"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist coverage",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run tests/unit",
+    "test:watch": "vitest tests/unit",
+    "test:coverage": "vitest run tests/unit --coverage",
+    "test:live": "vitest run tests/live/live-integration.test.ts",
+    "test:parity": "vitest run tests/live/live-field-parity.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
 }
