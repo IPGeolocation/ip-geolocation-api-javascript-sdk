@@ -1,4 +1,4 @@
-# IPGeolocation JavaScript SDK
+# IPGeolocation.io JavaScript SDK
 
 Official JavaScript SDK for the IPGeolocation.io IP Geolocation API.
 
@@ -97,7 +97,7 @@ You can pass plain objects to request methods. If you want validation before the
 
 ## Get Your API Key
 
-To use most SDK features, create or access your IPGeolocation account and copy an API key from your dashboard.
+To use most SDK features, create or access your IPGeolocation.io account and copy an API key from your dashboard.
 
 1. Sign up: [https://app.ipgeolocation.io/signup](https://app.ipgeolocation.io/signup)
 2. Verify your email if prompted
