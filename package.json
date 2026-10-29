@@ -70,12 +70,14 @@
   },
   "devDependencies": {
     "@types/node": "^24.5.2",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.12",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "overrides": {
-    "esbuild": "^0.28.1"
+    "esbuild": "^0.28.1",
+    "source-map-js": "^1.2.2",
+    "vite": "^7.3.7"
   }
 }
