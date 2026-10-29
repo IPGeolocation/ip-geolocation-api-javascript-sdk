@@ -1,6 +1,6 @@
 # IPGeolocation JavaScript SDK
 
-Official JavaScript SDK for the IPGeolocation IP Location API.
+Official JavaScript SDK for the IPGeolocation.io IP Geolocation API.
 
 Look up IPv4, IPv6, and domains with `/v3/ipgeo` and `/v3/ipgeo-bulk`. Get geolocation, company, ASN, timezone, network, hostname, abuse, user-agent, and security data from one API. Includes ESM, CommonJS, and TypeScript declarations.
 
@@ -86,7 +86,7 @@ You can pass plain objects to request methods. If you want validation before the
 | Item | Value |
 |------|-------|
 | Package | `ip-geolocation-api-javascript-sdk` |
-| API Type | IPGeolocation IP Location API |
+| API Type | IPGeolocation.io IP Geolocation API |
 | Supported Endpoints | `/v3/ipgeo`, `/v3/ipgeo-bulk` |
 | Supported Inputs | IPv4, IPv6, domain |
 | Main Data Returned | Geolocation, company, ASN, timezone, network, security, abuse, hostname, user-agent, currency |
