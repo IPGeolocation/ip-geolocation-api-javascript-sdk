@@ -1,0 +1,39 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  sdk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        node: ["18", "22", "24"]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      # Vitest requires Node 20+; the package build and imports are checked on Node 18.
+      - run: npm test
+        if: matrix.node != '18'
+      - run: npm run build
+      - run: node scripts/check-package.cjs
+      - run: npm pack --dry-run --ignore-scripts
+      - name: Check development and production dependencies
+        if: matrix.node == '24'
+        run: |
+          npm audit --audit-level=low
+          npm audit --omit=dev --audit-level=low
+      - run: git diff --exit-code -- package.json package-lock.json
