@@ -445,9 +445,10 @@ const response = await client.lookupIpGeolocation({
   ip: "8.8.8.8",
 });
 
-console.log(response.metadata.statusCode);
+console.log(response.metadata.statusCode);     // 200
 console.log(response.metadata.durationMs);
-console.log(response.metadata.firstHeaderValue("x-ratelimit-remaining"));
+console.log(response.metadata.creditsCharged); // credits deducted for this call, from X-Credits-Charged
+console.log(response.metadata.firstHeaderValue("x-credits-charged")); // the same value as a raw header string
 ```
 
 ## JSON Helpers
@@ -516,7 +517,8 @@ try {
   if (error instanceof UnauthorizedError) {
     console.error(error.apiMessage);
   } else if (error instanceof RateLimitError) {
-    console.error("Rate limit reached");
+    // 429: credits used up for this period (or the overage limit reached), not a per-second limit
+    console.error("Out of API credits:", error.apiMessage);
   } else {
     throw error;
   }
