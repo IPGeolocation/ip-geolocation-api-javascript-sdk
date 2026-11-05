@@ -11,6 +11,7 @@ export const Language = Object.freeze({
   KO: "ko",
   FA: "fa",
   PT: "pt",
+  AR: "ar",
 } as const);
 
 export type Language = (typeof Language)[keyof typeof Language];

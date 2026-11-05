@@ -81,7 +81,7 @@ function normalizeHeaderMultiMap(input: HeaderMultiMap | null | undefined): Head
     return Object.freeze({});
   }
 
-  const normalized: Record<string, readonly string[]> = {};
+  const normalized: Record<string, readonly string[]> = Object.create(null);
   for (const [key, values] of Object.entries(input)) {
     if (typeof key !== "string" || key.trim() === "") {
       continue;
@@ -102,7 +102,7 @@ function normalizeHeaderMultiMap(input: HeaderMultiMap | null | undefined): Head
     normalized[key] = Object.freeze(normalizedValues);
   }
 
-  return Object.freeze(normalized);
+  return Object.freeze({ ...normalized });
 }
 
 export interface Abuse {
@@ -182,6 +182,8 @@ export interface Network {
   connectionType?: string;
   route?: string;
   isAnycast?: boolean;
+  isCdn?: boolean;
+  cdnProviderName?: string;
 }
 
 export interface Security {
@@ -191,6 +193,9 @@ export interface Security {
   proxyProviderNames?: readonly string[];
   proxyConfidenceScore?: number;
   proxyLastSeen?: string;
+  proxyDaysSeen7d?: number;
+  proxyDaysSeen30d?: number;
+  proxyProviderCount30d?: number;
   isResidentialProxy?: boolean;
   isVpn?: boolean;
   vpnProviderNames?: readonly string[];
@@ -201,6 +206,14 @@ export interface Security {
   isAnonymous?: boolean;
   isKnownAttacker?: boolean;
   isBot?: boolean;
+  botConfidenceScore?: number;
+  botOperatorName?: string;
+  botType?: string;
+  botLastSeen?: string;
+  isKnownGoodBot?: boolean;
+  isCorporateGateway?: boolean;
+  corporateGatewayType?: string;
+  corporateGatewayProviderName?: string;
   isSpam?: boolean;
   isCloudProvider?: boolean;
   cloudProviderName?: string;

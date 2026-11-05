@@ -1,5 +1,6 @@
 import { RequestTimeoutError, TransportError } from "../errors";
 import type { HeaderMultiMap } from "../models";
+import { safeTransportError } from "./shared";
 
 export interface HttpRequestData {
   url: string;
@@ -60,34 +61,37 @@ export class FetchHttpTransport implements HttpTransport {
         method: request.method,
         headers: toFetchHeaders(request.headers),
         signal: controller.signal,
+        redirect: "manual",
       };
       if (request.body != null) {
         init.body = request.body;
       }
 
-      const response = await this.fetchImpl(request.url, init);
+      const response = await fetchWithRedirects(this.fetchImpl, request.url, init, controller.signal);
       clearTimeout(timeoutHandle);
       phase = "read";
       timeoutHandle = startTimeout(controller, request.readTimeoutMs);
 
-      const body = await readResponseBody(
-        response,
-        this.maxResponseBodyChars,
-        controller.signal,
-      );
+      let body = "";
+      try {
+        body = await readResponseBody(response, this.maxResponseBodyChars, controller.signal);
+      } catch (error) {
+        if (response.status < 300) throw error;
+      }
       return {
         statusCode: response.status,
         body,
         headers: extractHeaders(response.headers),
       };
     } catch (error: unknown) {
+      const key = requestApiKey(request.url);
       if (isAbortError(error)) {
-        throw new RequestTimeoutError(toTimeoutMessage(request, phase), { cause: error });
+        throw safeTransportError(new RequestTimeoutError(toTimeoutMessage(request, phase), { cause: error }), key);
       }
       if (error instanceof TransportError) {
-        throw error;
+        throw safeTransportError(error, key);
       }
-      throw new TransportError("HTTP transport error", { cause: error });
+      throw safeTransportError(new TransportError("HTTP transport error", { cause: error }), key);
     } finally {
       clearTimeout(timeoutHandle);
     }
@@ -98,15 +102,56 @@ export class FetchHttpTransport implements HttpTransport {
   }
 }
 
-function toFetchHeaders(headers: HeaderMultiMap): Record<string, string> {
-  const result: Record<string, string> = {};
+function requestApiKey(url: string): string | undefined {
+  try {
+    return new URL(url, "https://localhost").searchParams.get("apiKey") ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const redirectStatuses = new Set([301, 302, 303, 307, 308]);
+
+async function fetchWithRedirects(fetchImpl: FetchLike, url: string, init: RequestInit, signal: AbortSignal): Promise<Response> {
+  for (let redirects = 0; ; redirects++) {
+    const response = await withAbort(fetchImpl(url, init), signal);
+    if (response.type === "opaqueredirect") {
+      throw new TransportError("The browser blocked an API redirect. Use the final API address.");
+    }
+    if (!redirectStatuses.has(response.status)) return response;
+    const location = response.headers.get("Location");
+    if (location === null) return response;
+    void response.body?.cancel().catch(() => {});
+    if (redirects === 20) throw new TransportError("Too many API redirects");
+    const current = new URL(url, globalThis.location?.href);
+    const next = new URL(location, current);
+    if (next.protocol !== current.protocol || next.origin !== current.origin || next.username || next.password) {
+      throw new TransportError("The API redirected the request to another address");
+    }
+    const method = init.method?.toUpperCase();
+    if ((response.status === 303 && method !== "HEAD" && method !== "GET") ||
+        ((response.status === 301 || response.status === 302) && method === "POST")) {
+      init.method = "GET";
+      delete init.body;
+      const headers = new Headers(init.headers);
+      for (const name of ["content-encoding", "content-language", "content-location", "content-type", "content-length"]) {
+        headers.delete(name);
+      }
+      init.headers = headers;
+    }
+    url = next.href;
+  }
+}
+
+function toFetchHeaders(headers: HeaderMultiMap): HeadersInit {
+  const result: Record<string, string> = Object.create(null);
   for (const [key, values] of Object.entries(headers)) {
     if (values.length === 0) {
       continue;
     }
     result[key] = values.length === 1 ? values[0] ?? "" : values.join(", ");
   }
-  return result;
+  return "__proto__" in result ? Object.entries(result) : { ...result };
 }
 
 async function readResponseBody(
@@ -164,19 +209,19 @@ async function readResponseBody(
 
     return chunks.join("");
   } finally {
-    if (shouldCancelReader) {
-      await cancelReaderQuietly(reader);
+    if (shouldCancelReader || signal.aborted) {
+      void cancelReaderQuietly(reader);
     }
     reader.releaseLock();
   }
 }
 
 function extractHeaders(headers: Headers): HeaderMultiMap {
-  const result: Record<string, readonly string[]> = {};
+  const result: Record<string, readonly string[]> = Object.create(null);
   headers.forEach((value, key) => {
     result[key] = Object.freeze([value]);
   });
-  return Object.freeze(result);
+  return Object.freeze({ ...result });
 }
 
 function isAbortError(error: unknown): boolean {
@@ -216,10 +261,6 @@ function toTimeoutMessage(request: HttpRequestData, phase: TimeoutPhase): string
 }
 
 function withAbort<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
-  if (signal.aborted) {
-    return Promise.reject(new DOMException("aborted", "AbortError"));
-  }
-
   return new Promise<T>((resolve, reject) => {
     const onAbort = (): void => {
       cleanup();
@@ -231,6 +272,7 @@ function withAbort<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
     };
 
     signal.addEventListener("abort", onAbort, { once: true });
+    if (signal.aborted) onAbort();
     promise.then(
       (value) => {
         cleanup();

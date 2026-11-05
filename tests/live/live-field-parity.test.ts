@@ -248,7 +248,7 @@ function toApiShape(value: unknown): unknown {
 }
 
 function camelToSnake(value: string): string {
-  return value.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+  return value.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`).replace(/(\d+d)$/, "_$1");
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {

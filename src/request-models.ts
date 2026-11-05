@@ -139,14 +139,11 @@ function normalizeLanguage(value: Language | string | null | undefined): Languag
   }
 
   const normalizedValue = value.trim().toLowerCase();
-  if (normalizedValue === "") {
-    throw new ValidationError(`Unsupported language code: ${value}`);
-  }
   if (LANGUAGE_VALUES.includes(normalizedValue as Language)) {
     return normalizedValue as Language;
   }
 
-  throw new ValidationError(`Unsupported language code: ${value}`);
+  throw new ValidationError("Unsupported language code");
 }
 
 function normalizeOutput(
@@ -200,7 +197,7 @@ function normalizeHeaders(value: RequestHeaders | null | undefined): NormalizedH
     return Object.freeze({});
   }
 
-  const normalized: Record<string, string[]> = {};
+  const normalized: Record<string, string[]> = Object.create(null);
   const namesByLower = new Map<string, string>();
 
   for (const [rawName, rawValue] of toHeaderEntries(value)) {
@@ -301,11 +298,11 @@ function toHeaderEntry(entry: unknown): readonly [string, HeaderValue] {
 function freezeNormalizedHeaders(
   headers: Record<string, string[]>,
 ): NormalizedHeaders {
-  const normalized: Record<string, readonly string[]> = {};
+  const normalized: Record<string, readonly string[]> = Object.create(null);
   for (const [name, values] of Object.entries(headers)) {
     normalized[name] = Object.freeze([...values]);
   }
-  return Object.freeze(normalized);
+  return Object.freeze({ ...normalized });
 }
 
 function isHeadersInstance(value: unknown): value is Headers {
