@@ -15,6 +15,7 @@ import {
   buildQuery,
   mergeHeaders,
   resolveUserAgentHeader,
+  safeTransportError,
   toApiError,
   toMetadata,
   validateJsonOutput,
@@ -31,7 +32,7 @@ import { getVersion } from "./version";
 
 export class IpGeolocationClient {
   private readonly config: IpGeolocationClientConfig;
-  private readonly transport: HttpTransport;
+  readonly #transport: HttpTransport;
   private readonly ownsTransport: boolean;
   private closed = false;
 
@@ -47,7 +48,7 @@ export class IpGeolocationClient {
       config instanceof IpGeolocationClientConfig
         ? config
         : new IpGeolocationClientConfig(config);
-    this.transport = transport ?? new FetchHttpTransport();
+    this.#transport = transport ?? new FetchHttpTransport();
     this.ownsTransport = transport == null;
   }
 
@@ -66,12 +67,8 @@ export class IpGeolocationClient {
     const httpRequest = this.buildLookupHttpRequest(normalizedRequest);
     const { response, durationMs } = await this.executeWithMetrics(httpRequest);
 
-    if (Math.floor(response.statusCode / 100) !== 2) {
-      throw toApiError(response.statusCode, response.body);
-    }
-
     return {
-      data: parseSingleLookup(response.body),
+      data: parseSingleLookup(response.body, this.config.apiKey),
       metadata: toMetadata(response.statusCode, durationMs, response.headers),
     };
   }
@@ -85,10 +82,6 @@ export class IpGeolocationClient {
 
     const httpRequest = this.buildLookupHttpRequest(normalizedRequest);
     const { response, durationMs } = await this.executeWithMetrics(httpRequest);
-
-    if (Math.floor(response.statusCode / 100) !== 2) {
-      throw toApiError(response.statusCode, response.body);
-    }
 
     return {
       data: response.body,
@@ -109,12 +102,8 @@ export class IpGeolocationClient {
     const httpRequest = this.buildBulkHttpRequest(normalizedRequest);
     const { response, durationMs } = await this.executeWithMetrics(httpRequest);
 
-    if (Math.floor(response.statusCode / 100) !== 2) {
-      throw toApiError(response.statusCode, response.body);
-    }
-
     return {
-      data: parseBulkLookup(response.body),
+      data: parseBulkLookup(response.body, normalizedRequest.ips.length, this.config.apiKey),
       metadata: toMetadata(response.statusCode, durationMs, response.headers),
     };
   }
@@ -131,10 +120,6 @@ export class IpGeolocationClient {
     const httpRequest = this.buildBulkHttpRequest(normalizedRequest);
     const { response, durationMs } = await this.executeWithMetrics(httpRequest);
 
-    if (Math.floor(response.statusCode / 100) !== 2) {
-      throw toApiError(response.statusCode, response.body);
-    }
-
     return {
       data: response.body,
       metadata: toMetadata(response.statusCode, durationMs, response.headers),
@@ -148,7 +133,7 @@ export class IpGeolocationClient {
 
     this.closed = true;
     if (this.ownsTransport) {
-      await this.transport.close();
+      await this.#transport.close();
     }
   }
 
@@ -269,7 +254,15 @@ export class IpGeolocationClient {
     request: HttpRequestData,
   ): Promise<{ response: HttpResponseData; durationMs: number }> {
     const started = Date.now();
-    const response = await this.transport.send(request);
+    let response: HttpResponseData;
+    try {
+      response = await this.#transport.send(request);
+    } catch (error) {
+      throw safeTransportError(error, this.config.apiKey);
+    }
+    if (Math.floor(response.statusCode / 100) !== 2) {
+      throw toApiError(response.statusCode, response.body, this.config.apiKey);
+    }
     return {
       response,
       durationMs: Math.max(0, Date.now() - started),

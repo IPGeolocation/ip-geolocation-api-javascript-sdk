@@ -4,6 +4,7 @@ import {
   type JsonOutputMode as JsonOutputModeType,
 } from "./enums";
 import { SerializationError } from "./errors";
+import { configJson } from "./internal/redaction";
 
 const OMIT = Symbol("omit");
 
@@ -124,7 +125,9 @@ function toPlainData(
       });
     }
 
-    return serializeEntries(Object.entries(value), mode, seen);
+    const configView = (value as { [configJson]?: () => object })[configJson];
+    const object = typeof configView === "function" ? configView() : value;
+    return serializeEntries(Object.entries(object), mode, seen);
   } finally {
     seen.delete(value);
   }
@@ -135,7 +138,7 @@ function serializeEntries(
   mode: JsonOutputModeType,
   seen: WeakSet<object>,
 ): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
+  const result: Record<string, unknown> = Object.create(null);
   for (const [rawKey, rawValue] of entries) {
     const key = String(rawKey);
     const normalizedValue = toPlainData(rawValue, mode, seen, "object");

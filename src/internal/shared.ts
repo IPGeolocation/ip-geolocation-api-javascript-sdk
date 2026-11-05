@@ -8,12 +8,16 @@ import {
   NotFoundError,
   PayloadTooLargeError,
   RateLimitError,
+  RequestTimeoutError,
+  SerializationError,
   ServerError,
+  TransportError,
   UnauthorizedError,
   UnsupportedMediaTypeError,
   ValidationError,
 } from "../errors";
 import { ApiResponseMetadata, type HeaderMultiMap } from "../models";
+import { hasSafeErrorDetails, redactApiKey } from "./redaction";
 
 export type QueryParamValue = string | null | undefined;
 export type QueryParams =
@@ -48,7 +52,7 @@ export function buildQuery(params: QueryParams): string {
 export function mergeHeaders(
   ...headerMaps: ReadonlyArray<HeaderMultiMap | null | undefined>
 ): HeaderMultiMap {
-  const merged: Record<string, readonly string[]> = {};
+  const merged: Record<string, readonly string[]> = Object.create(null);
   const namesByLower = new Map<string, string>();
 
   for (const headerMap of headerMaps) {
@@ -72,7 +76,7 @@ export function mergeHeaders(
     }
   }
 
-  return Object.freeze(merged);
+  return Object.freeze({ ...merged });
 }
 
 export function resolveUserAgentHeader(
@@ -85,13 +89,17 @@ export function resolveUserAgentHeader(
   return Object.freeze([resolvedUserAgent]);
 }
 
-export function toApiError(statusCode: number, body: string): ApiError {
-  const apiMessage = extractApiMessage(body);
+export function toApiError(statusCode: number, body: string, apiKey?: string): ApiError {
+  const apiMessage = extractApiMessage(body, apiKey);
   const message =
     apiMessage == null
       ? `API request failed with HTTP status ${statusCode}`
       : `API request failed with HTTP status ${statusCode}: ${apiMessage}`;
 
+  return createApiError(statusCode, message, apiMessage);
+}
+
+function createApiError(statusCode: number, message: string, apiMessage?: string): ApiError {
   switch (statusCode) {
     case 400:
       return new BadRequestError(message, statusCode, apiMessage);
@@ -119,7 +127,7 @@ export function toApiError(statusCode: number, body: string): ApiError {
   }
 }
 
-export function extractApiMessage(body: string | null | undefined): string | undefined {
+export function extractApiMessage(body: string | null | undefined, apiKey?: string): string | undefined {
   if (body == null) {
     return undefined;
   }
@@ -128,11 +136,45 @@ export function extractApiMessage(body: string | null | undefined): string | und
     return undefined;
   }
 
+  let payload: unknown;
   try {
-    const payload = JSON.parse(normalizedBody);
-    return extractJsonMessage(payload) ?? truncateMessageBody(normalizedBody);
+    payload = JSON.parse(normalizedBody);
   } catch {
-    return truncateMessageBody(normalizedBody);
+    return truncateMessageBody(normalizedBody, apiKey);
+  }
+  const message = extractJsonMessage(payload);
+  if (message !== undefined) return redactApiKey(message, apiKey);
+  if (apiKey && normalizedBody.includes("\\")) {
+    try {
+      const decoded = JSON.stringify(payload);
+      const redacted = redactApiKey(decoded, apiKey);
+      if (redacted !== decoded) return truncateMessageBody(redacted, apiKey);
+    } catch {
+      return undefined;
+    }
+  }
+  return truncateMessageBody(normalizedBody, apiKey);
+}
+
+export function safeTransportError(error: unknown, apiKey?: string): unknown {
+  if (!apiKey) return error;
+  try {
+    if (hasSafeErrorDetails(error, apiKey)) return error;
+    if (typeof error === "string") return redactApiKey(error, apiKey);
+    if (!(error instanceof Error)) return new TransportError("HTTP transport error");
+    const text = Object.getOwnPropertyDescriptor(error, "message")?.value;
+    const message = typeof text === "string" ? redactApiKey(text, apiKey) : "HTTP transport error";
+    if (error instanceof ApiError) {
+      const status = Object.getOwnPropertyDescriptor(error, "statusCode")?.value;
+      const detail = Object.getOwnPropertyDescriptor(error, "apiMessage")?.value;
+      if (typeof status !== "number" || !Number.isInteger(status)) return new TransportError(message);
+      return createApiError(status, message, typeof detail === "string" ? redactApiKey(detail, apiKey) : undefined);
+    }
+    const ErrorType = [RequestTimeoutError, TransportError, SerializationError, ValidationError,
+      TypeError, RangeError, SyntaxError].find(type => error instanceof type) ?? Error;
+    return new ErrorType(message);
+  } catch {
+    return new TransportError("HTTP transport error");
   }
 }
 
@@ -266,8 +308,8 @@ function toMessageText(value: unknown): string | undefined {
   return undefined;
 }
 
-function truncateMessageBody(body: string): string | undefined {
-  const normalizedBody = body.replace(/\s+/g, " ").trim();
+function truncateMessageBody(body: string, apiKey?: string): string | undefined {
+  const normalizedBody = redactApiKey(redactApiKey(body, apiKey).replace(/\s+/g, " ").trim(), apiKey);
   if (normalizedBody === "") {
     return undefined;
   }

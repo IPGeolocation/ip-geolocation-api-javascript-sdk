@@ -1,4 +1,5 @@
 import { ValidationError } from "./errors";
+import { configForOutput, configJson } from "./internal/redaction";
 import { containsCrOrLf, isPlainObjectRecord } from "./internal/shared";
 
 const DEFAULT_BASE_URL = "https://api.ipgeolocation.io";
@@ -15,7 +16,7 @@ export interface IpGeolocationClientConfigInit {
 }
 
 export class IpGeolocationClientConfig {
-  public readonly apiKey: string | undefined;
+  declare public readonly apiKey: string | undefined;
   public readonly requestOrigin: string | undefined;
   public readonly baseUrl: string;
   public readonly connectTimeoutMs: number;
@@ -41,7 +42,13 @@ export class IpGeolocationClientConfig {
       DEFAULT_READ_TIMEOUT_MS,
     );
 
-    this.apiKey = apiKey;
+    const forOutput = () => configForOutput(this);
+    Object.defineProperties(this, {
+      apiKey: { enumerable: true, get: () => apiKey },
+      toJSON: { value: forOutput },
+      [configJson]: { value: forOutput },
+      [Symbol.for("nodejs.util.inspect.custom")]: { value: forOutput },
+    });
     this.requestOrigin = requestOrigin;
     this.baseUrl = baseUrl;
     this.connectTimeoutMs = connectTimeoutMs;

@@ -1,5 +1,6 @@
 import { LocationConfidence } from "../enums";
 import { SerializationError } from "../errors";
+import { redactApiKey } from "./redaction";
 import { isPlainObjectRecord } from "./shared";
 import type {
   Abuse,
@@ -22,29 +23,33 @@ import type {
   UserAgentOperatingSystem,
 } from "../models";
 
-export function parseSingleLookup(body: string): IpGeolocationResponse {
-  const payload = parseJson(body, "Failed to deserialize API response");
+export function parseSingleLookup(body: string, apiKey?: string): IpGeolocationResponse {
+  const payload = parseJson(body, "Failed to deserialize API response", apiKey);
   if (!isPlainObjectRecord(payload)) {
     throw new SerializationError("Failed to deserialize API response");
   }
   return parseIpGeolocationResponse(payload);
 }
 
-export function parseBulkLookup(body: string): readonly BulkLookupResult[] {
-  const payload = parseJson(body, "Failed to deserialize bulk lookup response");
+export function parseBulkLookup(body: string, expectedCount?: number, apiKey?: string): readonly BulkLookupResult[] {
+  const payload = parseJson(body, "Failed to deserialize bulk lookup response", apiKey);
   if (!Array.isArray(payload)) {
     throw new SerializationError(
       "Failed to deserialize bulk response: expected an array payload",
     );
   }
 
+  if (expectedCount !== undefined && payload.length !== expectedCount) {
+    throw new SerializationError(`Expected ${expectedCount} bulk results but received ${payload.length}`);
+  }
   return Object.freeze(
     payload.map((item) => {
       if (isBulkErrorItem(item)) {
+        const message = coerceOptionalString(item.message, "message");
         return freezeDefined<BulkLookupError>({
           success: false,
           error: freezeDefined({
-            message: coerceOptionalString(item.message, "message"),
+            message: message === undefined ? undefined : redactApiKey(message, apiKey),
           }),
         });
       }
@@ -184,6 +189,8 @@ function parseNetwork(node: Record<string, unknown>): Network {
     connectionType: coerceOptionalString(node.connection_type, "network.connection_type"),
     route: coerceOptionalString(node.route, "network.route"),
     isAnycast: coerceOptionalBoolean(node.is_anycast, "network.is_anycast"),
+    isCdn: coerceOptionalBoolean(node.is_cdn, "network.is_cdn"),
+    cdnProviderName: coerceOptionalString(node.cdn_provider_name, "network.cdn_provider_name"),
   });
 }
 
@@ -201,6 +208,9 @@ function parseSecurity(node: Record<string, unknown>): Security {
       "security.proxy_confidence_score",
     ),
     proxyLastSeen: coerceOptionalString(node.proxy_last_seen, "security.proxy_last_seen"),
+    proxyDaysSeen7d: coerceOptionalNumber(node.proxy_days_seen_7d, "security.proxy_days_seen_7d"),
+    proxyDaysSeen30d: coerceOptionalNumber(node.proxy_days_seen_30d, "security.proxy_days_seen_30d"),
+    proxyProviderCount30d: coerceOptionalNumber(node.proxy_provider_count_30d, "security.proxy_provider_count_30d"),
     isResidentialProxy: coerceOptionalBoolean(
       node.is_residential_proxy,
       "security.is_residential_proxy",
@@ -223,6 +233,14 @@ function parseSecurity(node: Record<string, unknown>): Security {
       "security.is_known_attacker",
     ),
     isBot: coerceOptionalBoolean(node.is_bot, "security.is_bot"),
+    botConfidenceScore: coerceOptionalNumber(node.bot_confidence_score, "security.bot_confidence_score"),
+    botOperatorName: coerceOptionalString(node.bot_operator_name, "security.bot_operator_name"),
+    botType: coerceOptionalString(node.bot_type, "security.bot_type"),
+    botLastSeen: coerceOptionalString(node.bot_last_seen, "security.bot_last_seen"),
+    isKnownGoodBot: coerceOptionalBoolean(node.is_known_good_bot, "security.is_known_good_bot"),
+    isCorporateGateway: coerceOptionalBoolean(node.is_corporate_gateway, "security.is_corporate_gateway"),
+    corporateGatewayType: coerceOptionalString(node.corporate_gateway_type, "security.corporate_gateway_type"),
+    corporateGatewayProviderName: coerceOptionalString(node.corporate_gateway_provider_name, "security.corporate_gateway_provider_name"),
     isSpam: coerceOptionalBoolean(node.is_spam, "security.is_spam"),
     isCloudProvider: coerceOptionalBoolean(
       node.is_cloud_provider,
@@ -339,11 +357,11 @@ function freezeDefined<T extends object>(value: Record<string, unknown>): T {
   return Object.freeze(result) as T;
 }
 
-function parseJson(body: string, message: string): unknown {
+function parseJson(body: string, message: string, apiKey?: string): unknown {
   try {
     return JSON.parse(body);
   } catch (error) {
-    throw new SerializationError(message, { cause: error });
+    throw new SerializationError(message, apiKey ? undefined : { cause: error });
   }
 }
 
