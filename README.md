@@ -177,7 +177,7 @@ Feature availability depends on your plan and request parameters.
 | `fields` and `excludes` | Supported | Supported |
 | Request-origin auth | Not supported | Supported for `/v3/ipgeo` only |
 
-Paid plans still need `include` for optional modules. `fields` and `excludes` only trim the response. They do not turn modules on or unlock paid data.
+Paid plans still need the `include` parameter for optional modules. `fields` and `excludes` only trim the response. They do not turn modules on or unlock paid data.
 
 ## Client Configuration
 
