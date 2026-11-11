@@ -519,7 +519,7 @@ try {
   if (error instanceof UnauthorizedError) {
     console.error(error.apiMessage);
   } else if (error instanceof RateLimitError) {
-    // 429: credits used up for this period (or the overage limit reached), not a per-second limit
+    // 429: no credits left (overage off or at its cap), not a per-second limit
     console.error("Out of API credits:", error.apiMessage);
   } else {
     throw error;
