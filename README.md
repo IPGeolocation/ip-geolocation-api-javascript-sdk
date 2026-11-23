@@ -573,7 +573,7 @@ Yes. Use `headers` with a plain object, `Headers`, `Map`, or an iterable of `[na
 </details>
 
 <details>
-<summary><strong>Does `userAgent` do the same thing as `headers["User-Agent"]`?</strong></summary>
+<summary><strong>Does <code>userAgent</code> do the same thing as <code>headers["User-Agent"]</code>?</strong></summary>
 Almost. Both affect the outbound `User-Agent` header, but `userAgent` takes precedence when both are set.
 </details>
 
